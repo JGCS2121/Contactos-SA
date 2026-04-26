@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.people.v1.PeopleService;
@@ -42,7 +42,7 @@ public class GoogleContactsSync {
         credential.setSelectedAccount(account.getAccount());
 
         PeopleService people = new PeopleService.Builder(
-                AndroidHttp.newCompatibleTransport(),
+                new NetHttpTransport(),
                 GsonFactory.getDefaultInstance(),
                 credential)
                 .setApplicationName("Style Aeternum CRM")
@@ -76,3 +76,4 @@ public class GoogleContactsSync {
         return synced;
     }
 }
+
