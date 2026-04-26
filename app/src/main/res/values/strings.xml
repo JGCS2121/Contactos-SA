@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Style Aeternum CRM</string>
+    <string name="service_label">Capturador WhatsApp CRM</string>
+    <string name="permission_required_msg">⚠️ Activa el acceso a notificaciones para que la app pueda capturar contactos de WhatsApp</string>
+    <string name="permission_granted">✅ Permiso activado. ¡La app está lista para capturar contactos!</string>
+    <string name="export_csv">Exportar CSV</string>
+    <string name="sync_google">Sincronizar Google</string>
+    <string name="open_whatsapp">Abrir en WhatsApp</string>
+</resources>

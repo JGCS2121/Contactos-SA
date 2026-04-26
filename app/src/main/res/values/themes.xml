@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.StyleAeternumCRM" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/wa_green</item>
+        <item name="colorPrimaryVariant">@color/wa_green_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowBackground">@color/bg_surface</item>
+        <item name="colorSurface">@color/bg_surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:statusBarColor">@color/wa_green_dark</item>
+    </style>
+
+    <!-- Pantalla Splash sin ActionBar -->
+    <style name="Theme.StyleAeternumCRM.Splash" parent="Theme.StyleAeternumCRM">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/wa_green</item>
+    </style>
+
+</resources>

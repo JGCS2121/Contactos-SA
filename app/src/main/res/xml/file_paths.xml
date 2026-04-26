@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Android 10+ documents directory -->
+    <external-files-path
+        name="documents"
+        path="Documents/" />
+    <!-- Android 9 and below: downloads -->
+    <external-path
+        name="downloads"
+        path="Download/" />
+</paths>

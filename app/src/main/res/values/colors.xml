@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- WhatsApp Brand Colors -->
+    <color name="wa_green">#25D366</color>
+    <color name="wa_green_dark">#006d2f</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Surfaces (Evergreen Utility design system) -->
+    <color name="bg_surface">#f3fcef</color>
+    <color name="surface_container_low">#edf6e9</color>
+    <color name="surface_container">#e7f1e4</color>
+
+    <!-- Text -->
+    <color name="text_primary">#151e16</color>
+    <color name="text_secondary">#3c4a3d</color>
+
+    <!-- Error -->
+    <color name="error_color">#ba1a1a</color>
+
+    <!-- Badge -->
+    <color name="badge_bg">#25D366</color>
+    <color name="badge_text">#005523</color>
+</resources>
