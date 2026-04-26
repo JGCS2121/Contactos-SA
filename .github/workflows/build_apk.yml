@@ -1,5 +1,4 @@
 name: Build APK
-
 on:
   push:
       branches: [ "main" ]
@@ -31,3 +30,4 @@ on:
                                                                                                                                       with:
                                                                                                                                                 name: app-debug
                                                                                                                                                           path: app/build/outputs/apk/debug/app-debug.apk
+                                                                                                                                                          
