@@ -38,19 +38,6 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("CREATE TABLE IF NOT EXISTS `agenda` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `contactoId` TEXT, `nombreCliente` TEXT, `telefono` TEXT, `descripcion` TEXT, `fechaHora` INTEGER NOT NULL, `recordatorio1` INTEGER NOT NULL, `recordatorio2` INTEGER NOT NULL, `estado` TEXT, `notas` TEXT, `fechaCreacion` INTEGER NOT NULL, FOREIGN KEY(`contactoId`) REFERENCES `contacts`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )");
         }
     };
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE contacts ADD COLUMN etiqueta TEXT DEFAULT ''");
-            database.execSQL("CREATE TABLE IF NOT EXISTS `labels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `colorHex` TEXT, `prefix` TEXT)");
-            
-            // Poblar datos por defecto
-            database.execSQL("INSERT INTO labels (name, colorHex, prefix) VALUES ('Compró', '#4CAF50', 'Clienta_')");
-            database.execSQL("INSERT INTO labels (name, colorHex, prefix) VALUES ('No compró', '#F44336', 'NoCompro_')");
-            database.execSQL("INSERT INTO labels (name, colorHex, prefix) VALUES ('Interesada', '#FF9800', 'Interesada_')");
-            database.execSQL("INSERT INTO labels (name, colorHex, prefix) VALUES ('Lista negra', '#424242', 'Bloqueada_')");
-            database.execSQL("INSERT INTO labels (name, colorHex, prefix) VALUES ('Cliente frecuente', '#2196F3', 'VIP_')");
-        }
-    };
 
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {

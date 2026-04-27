@@ -115,7 +115,7 @@ public class ContactDetailActivity extends AppCompatActivity {
             if (agendas == null || agendas.isEmpty()) {
                 TextView tvEmpty = new TextView(this);
                 tvEmpty.setText("No hay pedidos para este contacto.");
-                tvEmpty.setTextSize(14sp);
+                tvEmpty.setTextSize(14.0f);
                 containerPedidos.addView(tvEmpty);
                 return;
             }
