@@ -8,16 +8,14 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
-
+        android:layout_height="wrap_content">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/wa_green"
-            app:titleTextColor="@color/white"/>
-
+            app:titleTextColor="@color/white"
+            app:title="Agenda de Pedidos" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -27,35 +25,34 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
-            android:id="@+id/tv_counter"
+            android:id="@+id/tv_agenda_counter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/surface_container_low"
             android:padding="12dp"
-            android:text="Total: 0 · Este mes: 0"
+            android:text="0 pendientes · 0 para hoy"
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_contacts"
+            android:id="@+id/rv_agenda"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:paddingBottom="80dp"/>
     </LinearLayout>
 
-    <!-- FAB exportar CSV -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_export_csv"
+        android:id="@+id/fab_add_pedido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
-        app:srcCompat="@drawable/ic_download"
+        app:srcCompat="@android:drawable/ic_input_add"
         app:tint="@color/white"
-        app:backgroundTint="@color/wa_green"
-        android:contentDescription="Exportar CSV"/>
+        app:backgroundTint="@color/wa_green" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

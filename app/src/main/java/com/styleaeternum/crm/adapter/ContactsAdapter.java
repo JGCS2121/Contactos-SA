@@ -28,6 +28,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public interface OnContactClick { void onClick(CapturedContact contact); }
 
     private List<Object> items = new ArrayList<>(); // String (header) | CapturedContact
+    private List<CapturedContact> fullContacts = new ArrayList<>();
     private final OnContactClick listener;
 
     public ContactsAdapter(List<CapturedContact> contacts, OnContactClick listener) {
@@ -36,11 +37,23 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void updateData(List<CapturedContact> contacts) {
+        this.fullContacts = new ArrayList<>(contacts);
+        applyFilter("");
+    }
+    
+    public void filter(String query) {
+        applyFilter(query);
+    }
+
+    private void applyFilter(String query) {
         items.clear();
-        // Agrupar por groupMembership manteniendo orden de aparición
+        String lowerQuery = query == null ? "" : query.toLowerCase();
+        
         Map<String, List<CapturedContact>> grouped = new LinkedHashMap<>();
-        for (CapturedContact c : contacts) {
-            grouped.computeIfAbsent(c.groupMembership, k -> new ArrayList<>()).add(c);
+        for (CapturedContact c : fullContacts) {
+            if (c.name.toLowerCase().contains(lowerQuery) || c.phone.toLowerCase().contains(lowerQuery)) {
+                grouped.computeIfAbsent(c.groupMembership, k -> new ArrayList<>()).add(c);
+            }
         }
         for (Map.Entry<String, List<CapturedContact>> entry : grouped.entrySet()) {
             items.add(entry.getKey());               // header

@@ -12,6 +12,9 @@
     <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
         tools:ignore="ProtectedPermissions"
         xmlns:tools="http://schemas.android.com/tools" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -45,6 +48,17 @@
             android:name=".ui.ContactDetailActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.AgendaActivity"
+            android:exported="false"
+            android:label="Agenda de Pedidos" />
+
+        <activity
+            android:name=".ui.NuevoPedidoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:label="Nuevo Pedido" />
+
         <!-- ===== NOTIFICATION LISTENER SERVICE ===== -->
         <service
             android:name=".service.WhatsAppNotificationService"
@@ -66,6 +80,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"/>
         </provider>
+
+        <receiver android:name=".service.AgendaReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.styleaeternum.crm.ENTREGADO" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

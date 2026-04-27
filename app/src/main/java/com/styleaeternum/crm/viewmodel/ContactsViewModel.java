@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.styleaeternum.crm.data.CapturedContact;
+import com.styleaeternum.crm.data.ContactLabel;
 import com.styleaeternum.crm.data.ContactRepository;
 
 import java.util.List;
@@ -48,4 +49,8 @@ public class ContactsViewModel extends AndroidViewModel {
     public void insert(CapturedContact c)  { repository.insert(c);  }
     public void update(CapturedContact c)  { repository.update(c);  }
     public void delete(CapturedContact c)  { repository.delete(c);  }
+    
+    public LiveData<List<ContactLabel>> getAllLabels() {
+        return repository.getAllLabels();
+    }
 }

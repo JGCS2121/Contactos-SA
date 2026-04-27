@@ -21,4 +21,5 @@ public class CapturedContact {
     public String groupMembership = "";  // ej: abril2026
     public String notes = "";        // Notes
     public long capturedAt = 0L;     // timestamp milisegundos
+    public String etiqueta = "";     // Etiqueta asignada
 }

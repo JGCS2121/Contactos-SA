@@ -24,11 +24,16 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+
 import com.styleaeternum.crm.R;
 import com.styleaeternum.crm.adapter.ContactsAdapter;
 import com.styleaeternum.crm.data.CapturedContact;
+import com.styleaeternum.crm.data.ContactRepository;
 import com.styleaeternum.crm.sync.GoogleContactsSync;
 import com.styleaeternum.crm.util.CsvExporter;
+import com.styleaeternum.crm.util.CsvImporter;
 import com.styleaeternum.crm.viewmodel.ContactsViewModel;
 
 import java.io.File;
@@ -48,16 +53,31 @@ public class MainActivity extends AppCompatActivity {
     private ContactsAdapter   adapter;
     private GoogleSignInClient googleSignInClient;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ContactRepository repository;
+
+    private final ActivityResultLauncher<String> csvPickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    Toast.makeText(this, "Importando contactos...", Toast.LENGTH_SHORT).show();
+                    CsvImporter.importCsv(this, uri, repository);
+                }
+            });
+
+    private android.widget.TextView tvCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        repository = new ContactRepository(this);
+
         // Toolbar
         setSupportActionBar(findViewById(R.id.toolbar));
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(R.string.app_name);
+
+        tvCounter = findViewById(R.id.tv_counter);
 
         // RecyclerView
         RecyclerView rv = findViewById(R.id.rv_contacts);
@@ -72,16 +92,14 @@ public class MainActivity extends AppCompatActivity {
         // ViewModel
         viewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
         viewModel.getAllContacts().observe(this, contacts -> {
-            adapter.updateData(contacts != null ? contacts : new ArrayList<>());
+            List<CapturedContact> data = contacts != null ? contacts : new ArrayList<>();
+            adapter.updateData(data);
+            updateCounters(data);
         });
 
         // FAB exportar CSV
         FloatingActionButton fabExport = findViewById(R.id.fab_export_csv);
         fabExport.setOnClickListener(v -> exportCsv());
-
-        // Botón sincronizar Google Contacts
-        ExtendedFloatingActionButton btnSync = findViewById(R.id.btn_sync_google);
-        btnSync.setOnClickListener(v -> signInGoogle());
 
         // Configurar Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -89,6 +107,20 @@ public class MainActivity extends AppCompatActivity {
                 .requestScopes(new Scope("https://www.googleapis.com/auth/contacts"))
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+    
+    private void updateCounters(List<CapturedContact> contacts) {
+        int total = contacts.size();
+        int thisMonth = 0;
+        String currentMonthYear = new java.text.SimpleDateFormat("MMMyyyy", java.util.Locale.getDefault()).format(new java.util.Date()).toLowerCase();
+        
+        for (CapturedContact c : contacts) {
+            if (c.groupMembership != null && c.groupMembership.toLowerCase().equals(currentMonthYear)) {
+                thisMonth++;
+            }
+        }
+        
+        tvCounter.setText("Total: " + total + " contactos · Este mes: " + thisMonth);
     }
 
     // ─── Exportar CSV ───────────────────────────────────────────────────────
@@ -100,25 +132,8 @@ public class MainActivity extends AppCompatActivity {
                         "No hay contactos para exportar", Toast.LENGTH_SHORT).show());
                 return;
             }
-            File csv = CsvExporter.export(this, all);
-            runOnUiThread(() -> {
-                if (csv != null) {
-                    shareCsv(csv);
-                } else {
-                    Toast.makeText(this, "Error al exportar", Toast.LENGTH_SHORT).show();
-                }
-            });
+            runOnUiThread(() -> CsvExporter.export(this, all));
         });
-    }
-
-    private void shareCsv(File csv) {
-        Uri uri = FileProvider.getUriForFile(this,
-                getPackageName() + ".fileprovider", csv);
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("text/csv");
-        share.putExtra(Intent.EXTRA_STREAM, uri);
-        share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(Intent.createChooser(share, "Compartir CSV"));
     }
 
     // ─── Google Sign-In ──────────────────────────────────────────────────────
@@ -156,6 +171,63 @@ public class MainActivity extends AppCompatActivity {
                     synced + " contactos sincronizados con Google Contacts",
                     Toast.LENGTH_LONG).show());
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
+        
+        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.filter(newText);
+                return true;
+            }
+        });
+        
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        
+        if (id == R.id.action_import_csv) {
+            csvPickerLauncher.launch("text/csv");
+            return true;
+        } else if (id == R.id.action_agenda) {
+            startActivity(new Intent(this, AgendaActivity.class));
+            return true;
+        } else if (id == R.id.action_export_csv) {
+            exportCsv();
+            return true;
+        } else if (id == R.id.action_sync_google) {
+            signInGoogle();
+            return true;
+        } else if (id == R.id.action_about) {
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+            builder.setTitle("Acerca de");
+            builder.setMessage("Style Aeternum CRM v2.0\nSistema inteligente de captura.");
+            builder.setPositiveButton("OK", null);
+            builder.show();
+            return true;
+        } else if (id == R.id.action_manage_labels) {
+            // Se implementará en la próxima iteración
+            Toast.makeText(this, "Gestor de etiquetas próximamente", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getTitle().equals("Eliminar mes actual")) {
+            // Este botón se puede agregar dinámicamente o solo ejecutar.
+        }
+        
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -61,6 +61,28 @@
                 android:inputType="textPersonName"
                 android:layout_marginBottom="16dp"/>
 
+            <!-- Estado / Etiqueta -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ESTADO"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/wa_green"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="4dp"/>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"/>
+            </HorizontalScrollView>
+
             <!-- Teléfono (solo lectura) -->
             <TextView
                 android:layout_width="wrap_content"
@@ -178,7 +200,36 @@
                 android:textAllCaps="false"
                 android:textSize="14sp"
                 android:backgroundTint="@color/error_color"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:layout_marginBottom="32dp"/>
+
+            <!-- Sección de Agenda -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GESTIÓN DE PEDIDOS"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/wa_green"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btn_agendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📅 Agendar Pedido"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/wa_green" />
+
+            <LinearLayout
+                android:id="@+id/container_pedidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+                <!-- Los pedidos se cargarán dinámicamente -->
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

@@ -12,38 +12,54 @@ import java.util.concurrent.Executors;
  */
 public class ContactRepository {
 
-    private final ContactDao dao;
+    private final ContactDao contactDao;
+    private final LabelDao labelDao;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public ContactRepository(Context context) {
-        dao = AppDatabase.getInstance(context).contactDao();
+        AppDatabase db = AppDatabase.getInstance(context);
+        contactDao = db.contactDao();
+        labelDao = db.labelDao();
     }
 
     public void insert(CapturedContact c) {
-        executor.execute(() -> dao.insert(c));
+        executor.execute(() -> contactDao.insert(c));
     }
 
     public void update(CapturedContact c) {
-        executor.execute(() -> dao.update(c));
+        executor.execute(() -> contactDao.update(c));
     }
 
     public void delete(CapturedContact c) {
-        executor.execute(() -> dao.delete(c));
+        executor.execute(() -> contactDao.delete(c));
     }
 
     public LiveData<List<CapturedContact>> getAllContacts() {
-        return dao.getAllContacts();
+        return contactDao.getAllContacts();
     }
 
     public List<CapturedContact> getAllContactsSync() {
-        return dao.getAllContactsSync();
+        return contactDao.getAllContactsSync();
     }
 
     public CapturedContact getByPhone(String phone) {
-        return dao.getByPhone(phone);
+        return contactDao.getByPhone(phone);
     }
 
     public int countByGroup(String group) {
-        return dao.countByGroup(group);
+        return contactDao.countByGroup(group);
+    }
+    
+    // Métodos para Etiquetas
+    public LiveData<List<ContactLabel>> getAllLabels() {
+        return labelDao.getAllLabels();
+    }
+    
+    public void insertLabel(ContactLabel l) {
+        executor.execute(() -> labelDao.insert(l));
+    }
+    
+    public void deleteLabel(ContactLabel l) {
+        executor.execute(() -> labelDao.delete(l));
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Buscar"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
+        android:id="@+id/action_agenda"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Agenda"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_import_csv"
+        android:title="Importar CSV"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_export_csv"
+        android:title="Exportar CSV"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sync_google"
+        android:title="Sincronizar Google"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_manage_labels"
+        android:title="Configurar Etiquetas"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="Acerca de"
+        app:showAsAction="never" />
+
+</menu>
