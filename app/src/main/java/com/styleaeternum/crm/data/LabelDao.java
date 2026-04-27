@@ -15,6 +15,9 @@ public interface LabelDao {
     @Query("SELECT * FROM labels ORDER BY name ASC")
     LiveData<List<ContactLabel>> getAllLabels();
 
+    @Query("SELECT * FROM labels ORDER BY name ASC")
+    LiveData<List<ContactLabel>> getAll();
+
     @Query("SELECT * FROM labels WHERE name = :name LIMIT 1")
     ContactLabel getByName(String name);
 

@@ -73,17 +73,22 @@ public class WhatsAppNotificationService extends NotificationListenerService {
             int count    = repository.countByGroup(group);
             String id    = ContactIdHelper.buildId(group, count + 1);
 
+            // Nombre: prefijo del negocio + contador global (ej: "Tienda 010")
+            // Si no hay prefijo configurado, usa el ID clásico (ej: "abril2026_010")
+            int numero   = PrefijosHelper.getSiguienteNumero(getApplicationContext());
+            String nombre = PrefijosHelper.generarNombre(getApplicationContext(), id, numero);
+
             CapturedContact contact = new CapturedContact();
             contact.id              = id;
             contact.phone           = finalPhone;
-            contact.name            = id;   // nombre provisional = id
+            contact.name            = nombre;
             contact.groupMembership = group;
             contact.phoneType       = "WhatsApp Business";
             contact.notes           = "Capturado desde " + (WA_BUSSINES_PKG.equals(pkg) ? "WA Business" : "WhatsApp");
             contact.capturedAt      = System.currentTimeMillis();
 
             repository.insert(contact);
-            Log.i(TAG, "Nuevo contacto guardado: " + id + " | " + finalPhone);
+            Log.i(TAG, "Nuevo contacto guardado: " + id + " | " + nombre + " | " + finalPhone);
         });
     }
 

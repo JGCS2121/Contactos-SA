@@ -60,6 +60,11 @@
             android:windowSoftInputMode="adjustResize"
             android:label="Nuevo Pedido" />
 
+        <activity
+            android:name=".ui.GestorEtiquetasActivity"
+            android:exported="false"
+            android:label="Gestionar Etiquetas" />
+
         <!-- ===== NOTIFICATION LISTENER SERVICE ===== -->
         <service
             android:name=".service.WhatsAppNotificationService"

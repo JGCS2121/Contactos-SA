@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_sync_google) {
                 signInGoogle();
             } else if (id == R.id.nav_etiquetas) {
-                Toast.makeText(this, "Gestor de etiquetas próximamente", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, GestorEtiquetasActivity.class));
             } else if (id == R.id.nav_about) {
                 new AlertDialog.Builder(this)
                     .setTitle("Style Aeternum CRM")

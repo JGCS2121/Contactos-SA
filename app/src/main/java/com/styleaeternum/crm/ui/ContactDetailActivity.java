@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import android.graphics.Color;
-import androidx.appcompat.app.AlertDialog;
 import android.content.res.ColorStateList;
 
 import com.styleaeternum.crm.R;
@@ -172,61 +171,17 @@ public class ContactDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Al tocar un chip, solo guarda la etiqueta (clasificación).
+     * El nombre lo escribe el usuario libremente en el campo de arriba.
+     */
     private void onLabelSelected(ContactLabel label) {
         if (currentContact == null) return;
-        
-        String currentName = etName.getText().toString().trim();
-        String expectedOldName = currentContact.id;
-        
-        if (currentContact.etiqueta != null && !currentContact.etiqueta.isEmpty()) {
-            ContactLabel oldLabel = findLabelByName(currentContact.etiqueta);
-            if (oldLabel != null) {
-                expectedOldName = generateExpectedName(oldLabel.prefix, currentContact.id);
-            }
-        }
-        
-        String newExpectedName = generateExpectedName(label.prefix, currentContact.id);
-        
-        if (currentName.isEmpty() || currentName.equals(expectedOldName) || currentName.equals(currentContact.id)) {
-            etName.setText(newExpectedName);
-            currentContact.name = newExpectedName;
-            currentContact.etiqueta = label.name;
-            // Guardar inmediatamente en BD
-            viewModel.update(currentContact);
-            Toast.makeText(this, "Etiqueta '" + label.name + "' guardada", Toast.LENGTH_SHORT).show();
-        } else {
-            new AlertDialog.Builder(this)
-                .setTitle("Actualizar nombre")
-                .setMessage("¿Actualizar el nombre automáticamente a '" + newExpectedName + "'?")
-                .setPositiveButton("Sí, actualizar", (dialog, which) -> {
-                    etName.setText(newExpectedName);
-                    currentContact.name = newExpectedName;
-                    currentContact.etiqueta = label.name;
-                    viewModel.update(currentContact);
-                    Toast.makeText(this, "Etiqueta '" + label.name + "' guardada", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("No, mantener mi nombre", (dialog, which) -> {
-                    currentContact.etiqueta = label.name;
-                    viewModel.update(currentContact);
-                    Toast.makeText(this, "Etiqueta '" + label.name + "' guardada", Toast.LENGTH_SHORT).show();
-                })
-                .show();
-        }
-    }
-    
-    private String generateExpectedName(String prefix, String id) {
-        if (id == null) return "";
-        String[] parts = id.split("_");
-        String number = parts.length > 1 ? parts[parts.length - 1] : id;
-        return prefix + number;
-    }
-    
-    private ContactLabel findLabelByName(String name) {
-        if (availableLabels == null) return null;
-        for (ContactLabel l : availableLabels) {
-            if (l.name.equals(name)) return l;
-        }
-        return null;
+        currentContact.etiqueta = label.name;
+        viewModel.update(currentContact);
+        // Refrescar chips para marcar el seleccionado
+        populateChips();
+        Toast.makeText(this, "Etiqueta '" + label.name + "' guardada", Toast.LENGTH_SHORT).show();
     }
 
     private void saveContact() {
