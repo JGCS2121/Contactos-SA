@@ -83,7 +83,9 @@ public class WhatsAppNotificationService extends NotificationListenerService {
             contact.id              = id;
             contact.phone           = finalPhone;
             contact.name            = nombre;
-            contact.groupMembership = group;
+            // Guardar en el grupo del negocio (ej. "Tienda Lunes"). Si no hay, usa el mes.
+            String prefixVal        = PrefijosHelper.getPrefijo(getApplicationContext()).trim();
+            contact.groupMembership = prefixVal.isEmpty() ? group : prefixVal;
             contact.phoneType       = "WhatsApp Business";
             contact.notes           = "Capturado desde " + (WA_BUSSINES_PKG.equals(pkg) ? "WA Business" : "WhatsApp");
             contact.capturedAt      = System.currentTimeMillis();

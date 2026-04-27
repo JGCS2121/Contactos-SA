@@ -12,9 +12,11 @@ import com.styleaeternum.crm.R;
 import com.styleaeternum.crm.data.CapturedContact;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import com.styleaeternum.crm.data.ContactLabel;
 
 /**
  * RecyclerView adapter que muestra contactos agrupados por mes (groupMembership).
@@ -29,11 +31,22 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private List<Object> items = new ArrayList<>(); // String (header) | CapturedContact
     private List<CapturedContact> fullContacts = new ArrayList<>();
+    private Map<String, String> labelColors = new HashMap<>();
     private final OnContactClick listener;
 
     public ContactsAdapter(List<CapturedContact> contacts, OnContactClick listener) {
         this.listener = listener;
         updateData(contacts);
+    }
+
+    public void setLabels(List<ContactLabel> labels) {
+        labelColors.clear();
+        if (labels != null) {
+            for (ContactLabel l : labels) {
+                labelColors.put(l.name, l.colorHex);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public void updateData(List<CapturedContact> contacts) {
@@ -86,7 +99,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((HeaderVH) holder).bind((String) items.get(pos));
         } else {
             CapturedContact c = (CapturedContact) items.get(pos);
-            ((ContactVH) holder).bind(c, listener);
+            ((ContactVH) holder).bind(c, listener, labelColors);
         }
     }
 
@@ -100,16 +113,33 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     static class ContactVH extends RecyclerView.ViewHolder {
         TextView tvId, tvPhone, tvBadge;
+        android.widget.ImageView ivLabelTag;
+
         ContactVH(View v) {
             super(v);
             tvId    = v.findViewById(R.id.tv_contact_id_item);
             tvPhone = v.findViewById(R.id.tv_phone_item);
             tvBadge = v.findViewById(R.id.tv_badge);
+            ivLabelTag = v.findViewById(R.id.iv_label_tag);
         }
-        void bind(CapturedContact c, OnContactClick l) {
-            tvId.setText(c.id);
+        void bind(CapturedContact c, OnContactClick l, Map<String, String> labelColors) {
+            tvId.setText(c.name);
             tvPhone.setText(c.phone);
             tvBadge.setText(c.groupMembership);
+
+            // Mostrar bolita de color si tiene etiqueta
+            if (c.etiqueta != null && !c.etiqueta.isEmpty() && labelColors.containsKey(c.etiqueta)) {
+                ivLabelTag.setVisibility(View.VISIBLE);
+                try {
+                    android.graphics.drawable.GradientDrawable circle = new android.graphics.drawable.GradientDrawable();
+                    circle.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+                    circle.setColor(android.graphics.Color.parseColor(labelColors.get(c.etiqueta)));
+                    ivLabelTag.setBackground(circle);
+                } catch (Exception ignored) {}
+            } else {
+                ivLabelTag.setVisibility(View.GONE);
+            }
+
             itemView.setOnClickListener(v -> l.onClick(c));
         }
     }

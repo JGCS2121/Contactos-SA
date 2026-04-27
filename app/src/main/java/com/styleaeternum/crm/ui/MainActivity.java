@@ -31,8 +31,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.styleaeternum.crm.R;
 import com.styleaeternum.crm.adapter.ContactsAdapter;
+import com.styleaeternum.crm.data.AppDatabase;
 import com.styleaeternum.crm.data.CapturedContact;
 import com.styleaeternum.crm.data.ContactRepository;
+import com.styleaeternum.crm.data.LabelDao;
 import com.styleaeternum.crm.sync.GoogleContactsSync;
 import com.styleaeternum.crm.ui.AgendaActivity;
 import com.styleaeternum.crm.util.CsvExporter;
@@ -102,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 signInGoogle();
             } else if (id == R.id.nav_etiquetas) {
                 startActivity(new Intent(this, GestorEtiquetasActivity.class));
+            } else if (id == R.id.nav_permissions) {
+                startActivity(new Intent(this, PermissionSetupActivity.class));
             } else if (id == R.id.nav_about) {
                 new AlertDialog.Builder(this)
                     .setTitle("Style Aeternum CRM")
@@ -129,6 +133,12 @@ public class MainActivity extends AppCompatActivity {
             List<CapturedContact> data = contacts != null ? contacts : new ArrayList<>();
             adapter.updateData(data);
             updateCounters(data);
+        });
+
+        // Observar Etiquetas para mostrar los colores en la lista principal
+        LabelDao labelDao = AppDatabase.getInstance(this).labelDao();
+        labelDao.getAll().observe(this, labels -> {
+            adapter.setLabels(labels);
         });
 
         // FAB exportar CSV

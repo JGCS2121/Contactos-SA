@@ -1,6 +1,7 @@
 package com.styleaeternum.crm.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Button;
@@ -34,6 +35,14 @@ public class PermissionSetupActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Botón que lleva a Info de la App (para desbloquear ajustes restringidos)
+        Button btnAppInfo = findViewById(R.id.btn_app_info);
+        btnAppInfo.setOnClickListener(v -> {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+        });
+
         btnContinue.setOnClickListener(v -> checkAndProceed());
 
         updateUI();
@@ -43,11 +52,10 @@ public class PermissionSetupActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateUI();
-        // Si ya tiene permiso, pasar directo a MainActivity
-        if (NotificationPermissionHelper.isGranted(this)) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }
+        // Si ya tiene permiso Y NO vino desde el menú (es decir, es el inicio real), pasar directo.
+        // Como no podemos saber fácil si vino del menú, si está iniciada por el launcher pasa.
+        // Mejor: no forzamos finish() en onResume si la abrimos intencionalmente, pero
+        // para no romper el flujo, dejemos que el usuario presione el botón de Continuar o Salir.
     }
 
     private void updateUI() {
@@ -65,7 +73,11 @@ public class PermissionSetupActivity extends AppCompatActivity {
 
     private void checkAndProceed() {
         if (NotificationPermissionHelper.isGranted(this)) {
-            startActivity(new Intent(this, MainActivity.class));
+            // Si ya está en MainActivity (vino por el menú), solo cerramos esta.
+            // Si vino del Splash, abrimos MainActivity.
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
             finish();
         } else {
             updateUI();

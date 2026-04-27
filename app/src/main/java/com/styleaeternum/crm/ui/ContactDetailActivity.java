@@ -37,8 +37,8 @@ public class ContactDetailActivity extends AppCompatActivity {
     private ContactsViewModel viewModel;
     private CapturedContact   currentContact;
 
-    private TextView tvId, tvPhone, tvGroup, tvType;
-    private EditText etName, etNotes;
+    private TextView tvId, tvPhone, tvType;
+    private EditText etName, etNotes, etGroup;
     private Button   btnSave, btnWhatsApp, btnDelete, btnAgendar;
     private android.widget.LinearLayout containerPedidos;
     private ChipGroup chipGroupStatus;
@@ -60,8 +60,8 @@ public class ContactDetailActivity extends AppCompatActivity {
 
         tvId      = findViewById(R.id.tv_contact_id);
         tvPhone   = findViewById(R.id.tv_phone);
-        tvGroup   = findViewById(R.id.tv_group);
         tvType    = findViewById(R.id.tv_type);
+        etGroup   = findViewById(R.id.et_group);
         etName    = findViewById(R.id.et_name);
         etNotes   = findViewById(R.id.et_notes);
         btnSave   = findViewById(R.id.btn_save);
@@ -110,7 +110,7 @@ public class ContactDetailActivity extends AppCompatActivity {
     private void bindData(CapturedContact c) {
         tvId.setText(c.id);
         tvPhone.setText(c.phone);
-        tvGroup.setText(c.groupMembership);
+        etGroup.setText(c.groupMembership);
         tvType.setText(c.phoneType);
         etName.setText(c.name);
         etNotes.setText(c.notes);
@@ -188,6 +188,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         if (currentContact == null) return;
         currentContact.name  = etName.getText().toString().trim();
         currentContact.notes = etNotes.getText().toString().trim();
+        currentContact.groupMembership = etGroup.getText().toString().trim();
         viewModel.update(currentContact);
         Toast.makeText(this, "Guardado", Toast.LENGTH_SHORT).show();
     }

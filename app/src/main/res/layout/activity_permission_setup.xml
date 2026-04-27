@@ -97,6 +97,17 @@
             android:textColor="@color/white"
             android:layout_marginBottom="12dp"/>
 
+        <!-- Botón secundario: Abrir info de la app (para permisos restringidos en Android 13+) -->
+        <Button
+            android:id="@+id/btn_app_info"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Desbloquear opción oculta (Android 13+)"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_marginBottom="12dp"/>
+
         <!-- Botón secundario: Continuar (deshabilitado hasta permiso) -->
         <Button
             android:id="@+id/btn_continue"
