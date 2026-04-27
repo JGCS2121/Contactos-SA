@@ -205,9 +205,13 @@ public class MainActivity extends AppCompatActivity {
                         .getSignedInAccountFromIntent(data)
                         .getResult(ApiException.class);
                 syncToGoogle(account);
-            } catch (ApiException e) {
-                Toast.makeText(this, "Error Google Sign-In: " + e.getMessage(),
-                        Toast.LENGTH_LONG).show();
+            } catch (com.google.android.gms.common.api.ApiException e) {
+                String debugSha = getAppSignatureSHA1();
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Error de Conexión (Código " + e.getStatusCode() + ")")
+                    .setMessage("Para solucionar este error, registra este código SHA-1 en Google Cloud Console:\n\n" + debugSha)
+                    .setPositiveButton("Cerrar", null)
+                    .show();
             }
         }
     }
