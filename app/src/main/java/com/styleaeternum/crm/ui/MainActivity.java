@@ -7,10 +7,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.navigation.NavigationView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private ContactRepository repository;
+    private DrawerLayout drawerLayout;
 
     private final ActivityResultLauncher<String> csvPickerLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
@@ -72,6 +79,37 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(findViewById(R.id.toolbar));
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(R.string.app_name);
+
+        // Drawer (menú hamburguesa)
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, findViewById(R.id.toolbar),
+                R.string.app_name, R.string.app_name);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navView = findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener(item -> {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            int id = item.getItemId();
+            if (id == R.id.nav_agenda) {
+                startActivity(new Intent(this, AgendaActivity.class));
+            } else if (id == R.id.nav_export_csv) {
+                exportCsv();
+            } else if (id == R.id.nav_import_csv) {
+                csvPickerLauncher.launch("text/csv");
+            } else if (id == R.id.nav_sync_google) {
+                signInGoogle();
+            } else if (id == R.id.nav_etiquetas) {
+                Toast.makeText(this, "Gestor de etiquetas próximamente", Toast.LENGTH_SHORT).show();
+            } else if (id == R.id.nav_about) {
+                new AlertDialog.Builder(this)
+                    .setTitle("Style Aeternum CRM")
+                    .setMessage("v2.0 — Sistema inteligente de captura de clientes.")
+                    .setPositiveButton("OK", null).show();
+            }
+            return true;
+        });
 
         tvCounter = findViewById(R.id.tv_counter);
 
@@ -221,6 +259,15 @@ public class MainActivity extends AppCompatActivity {
         }
         
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

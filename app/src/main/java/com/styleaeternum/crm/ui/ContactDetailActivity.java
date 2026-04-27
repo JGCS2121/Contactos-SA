@@ -45,6 +45,7 @@ public class ContactDetailActivity extends AppCompatActivity {
     private ChipGroup chipGroupStatus;
     private List<ContactLabel> availableLabels;
     private final java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newSingleThreadExecutor();
+    private boolean dataCargada = false; // Para no sobreescribir edits del usuario
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +92,15 @@ public class ContactDetailActivity extends AppCompatActivity {
 
         viewModel.getContactById(contactId).observe(this, contact -> {
             if (contact == null) { finish(); return; }
-            currentContact = contact;
-            bindData(contact);
+            // Solo cargamos los datos la primera vez para no sobreescribir lo que el usuario edita
+            if (!dataCargada) {
+                currentContact = contact;
+                bindData(contact);
+                dataCargada = true;
+            } else {
+                // Solo actualizamos el objeto en memoria sin tocar los campos de UI
+                currentContact = contact;
+            }
         });
 
         btnSave.setOnClickListener(v -> saveContact());
@@ -181,17 +189,26 @@ public class ContactDetailActivity extends AppCompatActivity {
         
         if (currentName.isEmpty() || currentName.equals(expectedOldName) || currentName.equals(currentContact.id)) {
             etName.setText(newExpectedName);
+            currentContact.name = newExpectedName;
             currentContact.etiqueta = label.name;
+            // Guardar inmediatamente en BD
+            viewModel.update(currentContact);
+            Toast.makeText(this, "Etiqueta '" + label.name + "' guardada", Toast.LENGTH_SHORT).show();
         } else {
             new AlertDialog.Builder(this)
                 .setTitle("Actualizar nombre")
                 .setMessage("¿Actualizar el nombre automáticamente a '" + newExpectedName + "'?")
                 .setPositiveButton("Sí, actualizar", (dialog, which) -> {
                     etName.setText(newExpectedName);
+                    currentContact.name = newExpectedName;
                     currentContact.etiqueta = label.name;
+                    viewModel.update(currentContact);
+                    Toast.makeText(this, "Etiqueta '" + label.name + "' guardada", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("No, mantener mi nombre", (dialog, which) -> {
                     currentContact.etiqueta = label.name;
+                    viewModel.update(currentContact);
+                    Toast.makeText(this, "Etiqueta '" + label.name + "' guardada", Toast.LENGTH_SHORT).show();
                 })
                 .show();
         }

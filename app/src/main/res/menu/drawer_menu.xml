@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_inicio"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="Inicio" />
+
+    <item
+        android:id="@+id/nav_agenda"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Agenda de Pedidos" />
+
+    <item
+        android:id="@+id/nav_export_csv"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Exportar CSV" />
+
+    <item
+        android:id="@+id/nav_import_csv"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="Importar CSV" />
+
+    <item
+        android:id="@+id/nav_sync_google"
+        android:icon="@android:drawable/ic_popup_sync"
+        android:title="Sincronizar con Google" />
+
+    <item
+        android:id="@+id/nav_etiquetas"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Gestionar Etiquetas" />
+
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="Acerca de la App" />
+
+</menu>

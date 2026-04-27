@@ -1,61 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_surface">
+    android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/wa_green"
-            app:titleTextColor="@color/white"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <LinearLayout
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:background="@color/bg_surface">
 
-        <TextView
-            android:id="@+id/tv_counter"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/surface_container_low"
-            android:padding="12dp"
-            android:text="Total: 0 · Este mes: 0"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:gravity="center" />
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/wa_green"
+                app:titleTextColor="@color/white"/>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_contacts"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
-            android:clipToPadding="false"/>
-    </LinearLayout>
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!-- FAB exportar CSV -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_export_csv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
-        app:srcCompat="@drawable/ic_download"
-        app:tint="@color/white"
-        app:backgroundTint="@color/wa_green"
-        android:contentDescription="Exportar CSV"/>
+            <TextView
+                android:id="@+id/tv_counter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/surface_container_low"
+                android:padding="12dp"
+                android:text="Total: 0 · Este mes: 0"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="center" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:clipToPadding="false"
+                android:paddingBottom="80dp"/>
+        </LinearLayout>
+
+        <!-- FAB exportar CSV -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_export_csv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="24dp"
+            app:srcCompat="@drawable/ic_download"
+            app:tint="@color/white"
+            app:backgroundTint="@color/wa_green"
+            android:contentDescription="Exportar CSV"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- ===== DRAWER LATERAL (MENÚ HAMBURGUESA) ===== -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white"
+        app:menu="@menu/drawer_menu"
+        app:itemTextColor="@color/text_primary"
+        app:itemIconTint="@color/wa_green"
+        app:headerLayout="@layout/nav_header" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
