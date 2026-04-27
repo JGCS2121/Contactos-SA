@@ -112,32 +112,39 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     static class ContactVH extends RecyclerView.ViewHolder {
-        TextView tvId, tvPhone, tvBadge;
-        android.widget.ImageView ivLabelTag;
-
+        TextView tvId, tvPhone, tvBadge, tvLabelTag;
+        
         ContactVH(View v) {
             super(v);
             tvId    = v.findViewById(R.id.tv_contact_id_item);
             tvPhone = v.findViewById(R.id.tv_phone_item);
             tvBadge = v.findViewById(R.id.tv_badge);
-            ivLabelTag = v.findViewById(R.id.iv_label_tag);
+            tvLabelTag = v.findViewById(R.id.tv_label_tag);
         }
         void bind(CapturedContact c, OnContactClick l, Map<String, String> labelColors) {
             tvId.setText(c.name);
             tvPhone.setText(c.phone);
             tvBadge.setText(c.groupMembership);
 
-            // Mostrar bolita de color si tiene etiqueta
-            if (c.etiqueta != null && !c.etiqueta.isEmpty() && labelColors.containsKey(c.etiqueta)) {
-                ivLabelTag.setVisibility(View.VISIBLE);
-                try {
-                    android.graphics.drawable.GradientDrawable circle = new android.graphics.drawable.GradientDrawable();
-                    circle.setShape(android.graphics.drawable.GradientDrawable.OVAL);
-                    circle.setColor(android.graphics.Color.parseColor(labelColors.get(c.etiqueta)));
-                    ivLabelTag.setBackground(circle);
-                } catch (Exception ignored) {}
+            // Mostrar chip de color si tiene etiqueta
+            if (c.etiqueta != null && !c.etiqueta.isEmpty()) {
+                tvLabelTag.setVisibility(View.VISIBLE);
+                tvLabelTag.setText(c.etiqueta.toUpperCase());
+                if (labelColors.containsKey(c.etiqueta)) {
+                    try {
+                        int color = android.graphics.Color.parseColor(labelColors.get(c.etiqueta));
+                        android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+                        gd.setColor(color);
+                        gd.setCornerRadius(100);
+                        tvLabelTag.setBackground(gd);
+                    } catch (Exception e) {
+                        tvLabelTag.setBackgroundResource(R.drawable.bg_badge);
+                    }
+                } else {
+                    tvLabelTag.setBackgroundResource(R.drawable.bg_badge);
+                }
             } else {
-                ivLabelTag.setVisibility(View.GONE);
+                tvLabelTag.setVisibility(View.GONE);
             }
 
             itemView.setOnClickListener(v -> l.onClick(c));

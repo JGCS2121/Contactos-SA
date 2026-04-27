@@ -68,6 +68,12 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.AgendaVH> 
                 Toast.makeText(v.getContext(), "WhatsApp Business no instalado", Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), com.styleaeternum.crm.ui.NuevoPedidoActivity.class);
+            intent.putExtra(com.styleaeternum.crm.ui.NuevoPedidoActivity.EXTRA_AGENDA_ID, a.id);
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override

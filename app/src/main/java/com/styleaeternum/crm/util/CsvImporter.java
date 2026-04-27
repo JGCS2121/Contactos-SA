@@ -27,6 +27,7 @@ public class CsvImporter {
                 
                 int nameIndex = -1;
                 int phoneIndex = -1;
+                int statusIndex = -1;
                 
                 while ((line = reader.readLine()) != null) {
                     // Manejo básico de comillas
@@ -37,6 +38,7 @@ public class CsvImporter {
                             String header = tokens[i].replace("\"", "").trim();
                             if (header.equalsIgnoreCase("Name")) nameIndex = i;
                             if (header.equalsIgnoreCase("Phone 1 - Value")) phoneIndex = i;
+                            if (header.equalsIgnoreCase("Estado CRM")) statusIndex = i;
                         }
                         firstLine = false;
                         if (nameIndex == -1 || phoneIndex == -1) {
@@ -50,6 +52,7 @@ public class CsvImporter {
                     
                     String rawName = tokens[nameIndex].replace("\"", "").trim();
                     String rawPhone = tokens[phoneIndex].replace("\"", "").trim();
+                    String rawStatus = (statusIndex != -1 && tokens.length > statusIndex) ? tokens[statusIndex].replace("\"", "").trim() : "";
                     
                     String phone = rawPhone.replaceAll("[^0-9]", "");
                     if (phone.isEmpty()) continue;
@@ -64,6 +67,7 @@ public class CsvImporter {
                     c.name = rawName;
                     c.phone = phone;
                     c.groupMembership = group;
+                    c.etiqueta = rawStatus; // Restaurar etiqueta
                     c.capturedAt = System.currentTimeMillis();
                     
                     repository.insert(c);

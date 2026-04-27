@@ -62,20 +62,32 @@ public class WhatsAppNotificationService extends NotificationListenerService {
 
         final String finalPhone = phone;
         executor.execute(() -> {
-            // Comprobar si ya existe en la BD
+            // Comprobar si ya existe en la BD por teléfono
             CapturedContact existing = repository.getByPhone(finalPhone);
             if (existing != null) {
                 Log.d(TAG, "Número ya registrado: " + finalPhone);
                 return;
             }
 
-            // Generar ID automático: abril2026_001
-            String group = ContactIdHelper.getCurrentGroup();
-            int count    = repository.countByGroup(group);
-            String id    = ContactIdHelper.buildId(group, count + 1);
+            // Lógica de Grupos y IDs
+            String monthGroup = ContactIdHelper.getCurrentGroup();
+            String prefixVal  = PrefijosHelper.getPrefijo(getApplicationContext()).trim();
+            
+            // El grupo de membresía será el prefijo (si existe) o el mes actual
+            String targetGroup = prefixVal.isEmpty() ? monthGroup : prefixVal;
+
+            // Contar cuántos hay en el grupo destino para la secuencia del ID
+            int count = repository.countByGroup(targetGroup);
+            String id = ContactIdHelper.buildId(targetGroup, count + 1);
+
+            // Garantizar que el ID sea único (por si el contador de Room falló o hay desfase)
+            int safetyCounter = 1;
+            while (repository.getByIdSync(id) != null) {
+                id = ContactIdHelper.buildId(targetGroup, count + 1 + safetyCounter);
+                safetyCounter++;
+            }
 
             // Nombre: prefijo del negocio + contador global (ej: "Tienda 010")
-            // Si no hay prefijo configurado, usa el ID clásico (ej: "abril2026_010")
             int numero   = PrefijosHelper.getSiguienteNumero(getApplicationContext());
             String nombre = PrefijosHelper.generarNombre(getApplicationContext(), id, numero);
 
@@ -83,15 +95,14 @@ public class WhatsAppNotificationService extends NotificationListenerService {
             contact.id              = id;
             contact.phone           = finalPhone;
             contact.name            = nombre;
-            // Guardar en el grupo del negocio (ej. "Tienda Lunes"). Si no hay, usa el mes.
-            String prefixVal        = PrefijosHelper.getPrefijo(getApplicationContext()).trim();
-            contact.groupMembership = prefixVal.isEmpty() ? group : prefixVal;
+            contact.groupMembership = targetGroup;
             contact.phoneType       = "WhatsApp Business";
             contact.notes           = "Capturado desde " + (WA_BUSSINES_PKG.equals(pkg) ? "WA Business" : "WhatsApp");
             contact.capturedAt      = System.currentTimeMillis();
 
-            repository.insert(contact);
-            Log.i(TAG, "Nuevo contacto guardado: " + id + " | " + nombre + " | " + finalPhone);
+            // Inserción síncrona dentro del executor del servicio para mantener el orden
+            repository.insertSync(contact);
+            Log.i(TAG, "Nuevo contacto guardado con éxito: " + id + " | " + nombre + " | " + finalPhone);
         });
     }
 

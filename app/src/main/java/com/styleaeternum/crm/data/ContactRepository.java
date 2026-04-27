@@ -26,6 +26,10 @@ public class ContactRepository {
         executor.execute(() -> contactDao.insert(c));
     }
 
+    public void insertSync(CapturedContact c) {
+        contactDao.insert(c);
+    }
+
     public void update(CapturedContact c) {
         executor.execute(() -> contactDao.update(c));
     }
@@ -44,6 +48,10 @@ public class ContactRepository {
 
     public CapturedContact getByPhone(String phone) {
         return contactDao.getByPhone(phone);
+    }
+
+    public CapturedContact getByIdSync(String id) {
+        return contactDao.getById(id);
     }
 
     public int countByGroup(String group) {

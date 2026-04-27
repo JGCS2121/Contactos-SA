@@ -61,13 +61,19 @@
             android:paddingHorizontal="10dp"
             android:paddingVertical="4dp"/>
 
-        <!-- Etiqueta colorida (estilo WhatsApp) -->
-        <ImageView
-            android:id="@+id/iv_label_tag"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+        <!-- Etiqueta colorida (Chip de texto) -->
+        <TextView
+            android:id="@+id/tv_label_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_gravity="center_vertical"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:background="@drawable/bg_badge"
             android:visibility="gone" />
 
     </LinearLayout>

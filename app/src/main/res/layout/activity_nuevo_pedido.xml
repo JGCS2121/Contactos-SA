@@ -50,6 +50,24 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="TELÉFONO / WHATSAPP"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/wa_green"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/et_telefono"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Ej: 57310..."
+                android:background="@color/surface_container_low"
+                android:paddingHorizontal="12dp"
+                android:inputType="phone"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="DESCRIPCIÓN DEL PEDIDO"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -152,10 +170,20 @@
                 android:layout_marginBottom="12dp"/>
 
             <Button
+                android:id="@+id/btn_eliminar_pedido"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="🗑️ Eliminar Pedido"
+                android:backgroundTint="@color/error_color"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:layout_marginBottom="12dp"/>
+
+            <Button
                 android:id="@+id/btn_cancelar_pedido"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="🗑️ Cancelar"
+                android:text="Atrás / Cancelar"
                 android:backgroundTint="@color/surface_container_low"
                 android:textColor="@color/text_primary"/>
 

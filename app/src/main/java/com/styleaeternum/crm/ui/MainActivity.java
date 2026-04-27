@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_export_csv) {
                 exportCsv();
             } else if (id == R.id.nav_import_csv) {
-                csvPickerLauncher.launch("text/csv");
+                csvPickerLauncher.launch("*/*");
             } else if (id == R.id.nav_sync_google) {
                 signInGoogle();
             } else if (id == R.id.nav_etiquetas) {
@@ -156,10 +156,16 @@ public class MainActivity extends AppCompatActivity {
     private void updateCounters(List<CapturedContact> contacts) {
         int total = contacts.size();
         int thisMonth = 0;
-        String currentMonthYear = new java.text.SimpleDateFormat("MMMyyyy", java.util.Locale.getDefault()).format(new java.util.Date()).toLowerCase();
+        
+        java.util.Calendar now = java.util.Calendar.getInstance();
+        int currentMonth = now.get(java.util.Calendar.MONTH);
+        int currentYear = now.get(java.util.Calendar.YEAR);
         
         for (CapturedContact c : contacts) {
-            if (c.groupMembership != null && c.groupMembership.toLowerCase().equals(currentMonthYear)) {
+            java.util.Calendar captured = java.util.Calendar.getInstance();
+            captured.setTimeInMillis(c.capturedAt);
+            if (captured.get(java.util.Calendar.MONTH) == currentMonth && 
+                captured.get(java.util.Calendar.YEAR) == currentYear) {
                 thisMonth++;
             }
         }
@@ -209,11 +215,20 @@ public class MainActivity extends AppCompatActivity {
     private void syncToGoogle(GoogleSignInAccount account) {
         Toast.makeText(this, "Sincronizando con Google Contacts…", Toast.LENGTH_SHORT).show();
         executor.execute(() -> {
-            List<CapturedContact> all = viewModel.getAllContactsSync();
-            int synced = GoogleContactsSync.syncAll(this, account, all);
-            runOnUiThread(() -> Toast.makeText(this,
-                    synced + " contactos sincronizados con Google Contacts",
-                    Toast.LENGTH_LONG).show());
+            // El nuevo método maneja la obtención de locales y remotos internamente
+            int synced = GoogleContactsSync.syncAll(this, account, repository);
+            
+            runOnUiThread(() -> {
+                if (synced >= 0) {
+                    Toast.makeText(this, 
+                        synced + " contactos sincronizados (subida y bajada)", 
+                        Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, 
+                        "Error en la sincronización. Verifica tu conexión.", 
+                        Toast.LENGTH_LONG).show();
+                }
+            });
         });
     }
 
@@ -245,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         
         if (id == R.id.action_import_csv) {
-            csvPickerLauncher.launch("text/csv");
+            csvPickerLauncher.launch("*/*");
             return true;
         } else if (id == R.id.action_agenda) {
             startActivity(new Intent(this, AgendaActivity.class));

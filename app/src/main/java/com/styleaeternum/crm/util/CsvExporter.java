@@ -28,7 +28,7 @@ public class CsvExporter {
     
     // Columnas exactas de Google Contacts
     private static final String CSV_HEADER =
-        "Name,Given Name,Additional Name,Family Name,Yomi Name,Given Name Yomi,Additional Name Yomi,Family Name Yomi,Name Prefix,Name Suffix,Initials,Nickname,Short Name,Maiden Name,Birthday,Gender,Location,Billing Information,Directory Server,Mileage,Occupation,Hobby,Sensitivity,Priority,Subject,Notes,Language,Photo,Group Membership,Phone 1 - Type,Phone 1 - Value,Custom Field 1 - Type,Custom Field 1 - Value,Custom Field 2 - Type,Custom Field 2 - Value\n";
+        "Name,Given Name,Additional Name,Family Name,Yomi Name,Given Name Yomi,Additional Name Yomi,Family Name Yomi,Name Prefix,Name Suffix,Initials,Nickname,Short Name,Maiden Name,Birthday,Gender,Location,Billing Information,Directory Server,Mileage,Occupation,Hobby,Sensitivity,Priority,Subject,Notes,Language,Photo,Group Membership,Phone 1 - Type,Phone 1 - Value,Estado CRM,Custom Field 1 - Type,Custom Field 1 - Value,Custom Field 2 - Type,Custom Field 2 - Value\n";
 
     public static void export(Context context, List<CapturedContact> contacts) {
         String timestamp = new SimpleDateFormat("MMM_yyyy", Locale.getDefault()).format(new Date());
@@ -79,7 +79,9 @@ public class CsvExporter {
             sb.append(",,").append(escapeCsv(c.groupMembership)).append(",");
             // Phone 1 Type, Value
             sb.append("WhatsApp Business,").append(escapeCsv(c.phone)).append(",");
-            // Custom Fields (4 comas al final)
+            // Estado CRM
+            sb.append(escapeCsv(c.etiqueta)).append(",");
+            // Custom Fields (3 comas al final ahora que hemos usado una)
             sb.append(",,,\n");
             writer.write(sb.toString());
         }

@@ -107,6 +107,8 @@ public class ContactDetailActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(v -> deleteContact());
     }
 
+    private String selectedLabel = "";
+
     private void bindData(CapturedContact c) {
         tvId.setText(c.id);
         tvPhone.setText(c.phone);
@@ -114,6 +116,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         tvType.setText(c.phoneType);
         etName.setText(c.name);
         etNotes.setText(c.notes);
+        selectedLabel = c.etiqueta != null ? c.etiqueta : "";
         populateChips();
         cargarPedidosRecientes(c.id);
     }
@@ -152,36 +155,56 @@ public class ContactDetailActivity extends AppCompatActivity {
     private void populateChips() {
         if (availableLabels == null || chipGroupStatus == null) return;
         chipGroupStatus.removeAllViews();
+        chipGroupStatus.setSingleSelection(true);
+        chipGroupStatus.setSelectionRequired(false);
+
         for (ContactLabel label : availableLabels) {
             Chip chip = new Chip(this);
             chip.setText(label.name);
             chip.setCheckable(true);
-            try {
-                int color = Color.parseColor(label.colorHex);
-                chip.setChipBackgroundColor(ColorStateList.valueOf(color));
-                chip.setTextColor(Color.WHITE);
-            } catch (Exception ignored) {}
+            chip.setCheckedIconVisible(true);
+            chip.setCheckedIcon(androidx.core.content.ContextCompat.getDrawable(this, R.drawable.ic_check));
+            
+            boolean isThisSelected = label.name.equals(selectedLabel);
+            updateChipStyle(chip, label, isThisSelected);
 
-            chip.setOnClickListener(v -> onLabelSelected(label));
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    selectedLabel = label.name;
+                } else if (selectedLabel.equals(label.name)) {
+                    selectedLabel = "";
+                }
+                
+                // Actualizar estilos de todos los chips para reflejar la selección única
+                for (int i = 0; i < chipGroupStatus.getChildCount(); i++) {
+                    Chip child = (Chip) chipGroupStatus.getChildAt(i);
+                    ContactLabel cl = availableLabels.get(i);
+                    updateChipStyle(child, cl, cl.name.equals(selectedLabel));
+                }
+            });
+
             chipGroupStatus.addView(chip);
-
-            if (currentContact != null && label.name.equals(currentContact.etiqueta)) {
+            if (isThisSelected) {
                 chip.setChecked(true);
             }
         }
     }
 
-    /**
-     * Al tocar un chip, solo guarda la etiqueta (clasificación).
-     * El nombre lo escribe el usuario libremente en el campo de arriba.
-     */
-    private void onLabelSelected(ContactLabel label) {
-        if (currentContact == null) return;
-        currentContact.etiqueta = label.name;
-        viewModel.update(currentContact);
-        // Refrescar chips para marcar el seleccionado
-        populateChips();
-        Toast.makeText(this, "Etiqueta '" + label.name + "' guardada", Toast.LENGTH_SHORT).show();
+    private void updateChipStyle(Chip chip, ContactLabel label, boolean isSelected) {
+        try {
+            int color = Color.parseColor(label.colorHex);
+            if (isSelected) {
+                chip.setChipBackgroundColor(ColorStateList.valueOf(color));
+                chip.setTextColor(Color.WHITE);
+                chip.setChipStrokeWidth(0);
+                chip.setCheckedIconTint(ColorStateList.valueOf(Color.WHITE));
+            } else {
+                chip.setChipBackgroundColor(ColorStateList.valueOf(Color.TRANSPARENT));
+                chip.setTextColor(color);
+                chip.setChipStrokeColor(ColorStateList.valueOf(color));
+                chip.setChipStrokeWidth(3.0f);
+            }
+        } catch (Exception ignored) {}
     }
 
     private void saveContact() {
@@ -189,8 +212,10 @@ public class ContactDetailActivity extends AppCompatActivity {
         currentContact.name  = etName.getText().toString().trim();
         currentContact.notes = etNotes.getText().toString().trim();
         currentContact.groupMembership = etGroup.getText().toString().trim();
+        currentContact.etiqueta = selectedLabel; // Se guarda la etiqueta seleccionada
+        
         viewModel.update(currentContact);
-        Toast.makeText(this, "Guardado", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Datos guardados correctamente", Toast.LENGTH_SHORT).show();
     }
 
     private void openWhatsApp() {
@@ -212,6 +237,12 @@ public class ContactDetailActivity extends AppCompatActivity {
         viewModel.delete(currentContact);
         Toast.makeText(this, "Contacto eliminado", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        // Ocultar menú de 3 puntos temporalmente hasta que se definan funciones de configuración
+        return false;
     }
 
     @Override
