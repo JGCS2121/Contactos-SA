@@ -15,7 +15,6 @@ import androidx.work.WorkerParameters;
 
 import com.styleaeternum.crm.R;
 import com.styleaeternum.crm.ui.AgendaActivity;
-import com.styleaeternum.crm.ui.NuevoPedidoActivity;
 
 public class AgendaWorker extends Worker {
 
@@ -53,7 +52,7 @@ public class AgendaWorker extends Worker {
         PendingIntent piApp = PendingIntent.getActivity(getApplicationContext(), agendaId * 10, intentApp, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground) // Asegurar un icono válido, temporalmente usamos el default
+                .setSmallIcon(android.R.drawable.ic_popup_reminder)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .setContentIntent(piApp);

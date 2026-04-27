@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.styleaeternum.crm.R;
+import com.styleaeternum.crm.adapter.AgendaAdapter;
 import com.styleaeternum.crm.data.Agenda;
 import com.styleaeternum.crm.data.AppDatabase;
-import com.styleaeternum.crm.data.CapturedContact;
 
 import java.util.ArrayList;
 import java.util.List;

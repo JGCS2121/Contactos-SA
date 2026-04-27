@@ -1,8 +1,6 @@
 package com.styleaeternum.crm.ui;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -10,7 +8,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +18,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -32,11 +28,11 @@ import com.styleaeternum.crm.adapter.ContactsAdapter;
 import com.styleaeternum.crm.data.CapturedContact;
 import com.styleaeternum.crm.data.ContactRepository;
 import com.styleaeternum.crm.sync.GoogleContactsSync;
+import com.styleaeternum.crm.ui.AgendaActivity;
 import com.styleaeternum.crm.util.CsvExporter;
 import com.styleaeternum.crm.util.CsvImporter;
 import com.styleaeternum.crm.viewmodel.ContactsViewModel;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -220,11 +216,8 @@ public class MainActivity extends AppCompatActivity {
             builder.show();
             return true;
         } else if (id == R.id.action_manage_labels) {
-            // Se implementará en la próxima iteración
             Toast.makeText(this, "Gestor de etiquetas próximamente", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (item.getTitle().equals("Eliminar mes actual")) {
-            // Este botón se puede agregar dinámicamente o solo ejecutar.
         }
         
         return super.onOptionsItemSelected(item);
