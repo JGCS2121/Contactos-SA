@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "528609906057",
+    "project_id": "aeternum-crm",
+    "storage_bucket": "aeternum-crm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528609906057:android:e034362c49606f598e2558",
+        "android_client_info": {
+          "package_name": "com.styleaeternum.crm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrHVmHT9yaHk6zguIYjiu-VSEL7A3UyUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528609906057:android:c44e8b3a06ab13f48e2558",
+        "android_client_info": {
+          "package_name": "com.styleaeternum.crm.leads"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrHVmHT9yaHk6zguIYjiu-VSEL7A3UyUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
