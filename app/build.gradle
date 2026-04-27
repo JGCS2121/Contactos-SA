@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'com.google.gms.google-services'
 }
 
 android {
@@ -56,3 +55,5 @@ dependencies {
     implementation 'androidx.work:work-runtime:2.9.0'
     implementation 'androidx.startup:startup-runtime:1.1.1'
 }
+
+apply plugin: 'com.google.gms.google-services'
