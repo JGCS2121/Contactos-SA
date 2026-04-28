@@ -63,6 +63,18 @@
             android:label="Nuevo Pedido" />
 
         <activity
+            android:name=".ui.ImportMassActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:label="Importación Masiva" />
+
+        <activity
+            android:name=".ui.SmartCaptureActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:label="Captura Inteligente" />
+
+        <activity
             android:name=".ui.GestorEtiquetasActivity"
             android:exported="false"
             android:label="Gestionar Etiquetas" />

@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.room.migration.Migration;
 import androidx.annotation.NonNull;
 
-@Database(entities = {CapturedContact.class, ContactLabel.class, Agenda.class}, version = 3, exportSchema = false)
+@Database(entities = {CapturedContact.class, ContactLabel.class, Agenda.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
@@ -39,6 +39,13 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE contacts ADD COLUMN origen TEXT DEFAULT 'WhatsApp'");
+        }
+    };
+
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -48,7 +55,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "style_aeternum_crm.db"
                     )
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build();
                 }
             }

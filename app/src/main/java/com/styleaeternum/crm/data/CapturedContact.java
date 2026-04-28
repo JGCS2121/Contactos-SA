@@ -22,4 +22,5 @@ public class CapturedContact {
     public String notes = "";        // Notes
     public long capturedAt = 0L;     // timestamp milisegundos
     public String etiqueta = "";     // Etiqueta asignada
+    public String origen = "WhatsApp"; // WhatsApp | CSV | Carga masiva
 }

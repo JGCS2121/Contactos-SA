@@ -288,7 +288,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         
-        if (id == R.id.action_import_csv) {
+        if (id == R.id.action_smart_capture) {
+            startActivity(new Intent(this, SmartCaptureActivity.class));
+            return true;
+        } else if (id == R.id.action_import_mass) {
+            startActivity(new Intent(this, ImportMassActivity.class));
+            return true;
+        } else if (id == R.id.action_import_csv) {
             csvPickerLauncher.launch("*/*");
             return true;
         } else if (id == R.id.action_agenda) {
@@ -299,6 +305,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_sync_google) {
             signInGoogle();
+            return true;
+        } else if (id == R.id.action_sign_out_google) {
+            googleSignInClient.signOut().addOnCompleteListener(this, task -> {
+                Toast.makeText(this, "Cuenta de Google desvinculada", Toast.LENGTH_SHORT).show();
+            });
             return true;
         } else if (id == R.id.action_about) {
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);

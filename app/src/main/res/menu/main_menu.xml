@@ -16,6 +16,16 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_smart_capture"
+        android:title="Captura Inteligente"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_mass"
+        android:title="Carga Masiva"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_import_csv"
         android:title="Importar CSV"
         app:showAsAction="never" />
@@ -28,6 +38,11 @@
     <item
         android:id="@+id/action_sync_google"
         android:title="Sincronizar Google"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sign_out_google"
+        android:title="Cambiar cuenta de Google"
         app:showAsAction="never" />
 
     <item
