@@ -12,7 +12,12 @@
           "package_name": "com.styleaeternum.crm"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "528609906057-ntcoiidlbfo6ngtra6kvpvqjsbdqn0oq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBrHVmHT9yaHk6zguIYjiu-VSEL7A3UyUQ"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "528609906057-ntcoiidlbfo6ngtra6kvpvqjsbdqn0oq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -31,7 +41,20 @@
           "package_name": "com.styleaeternum.crm.leads"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "528609906057-h2iub20n195l6bcscsb8sb6fp5d0oil0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.styleaeternum.crm.leads",
+            "certificate_hash": "57568273b72db77ab26b75a0f691b54a9558214a"
+          }
+        },
+        {
+          "client_id": "528609906057-ntcoiidlbfo6ngtra6kvpvqjsbdqn0oq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBrHVmHT9yaHk6zguIYjiu-VSEL7A3UyUQ"
@@ -39,7 +62,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "528609906057-ntcoiidlbfo6ngtra6kvpvqjsbdqn0oq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
