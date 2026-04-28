@@ -121,7 +121,7 @@ public class ImportMassActivity extends AppCompatActivity {
             int counter = 1;
             for (String phone : validPhones) {
                 // Verificar si ya existe en DB para no duplicarlo a nivel de BD
-                CapturedContact existing = db.contactDao().getContactByPhoneBlocking(phone);
+                CapturedContact existing = db.contactDao().getByPhone(phone);
                 if (existing != null) {
                     continue; // Ya existe en la base de datos
                 }
@@ -141,7 +141,7 @@ public class ImportMassActivity extends AppCompatActivity {
             }
 
             for (CapturedContact contact : newContacts) {
-                db.contactDao().insertContact(contact);
+                db.contactDao().insert(contact);
             }
 
             runOnUiThread(() -> {

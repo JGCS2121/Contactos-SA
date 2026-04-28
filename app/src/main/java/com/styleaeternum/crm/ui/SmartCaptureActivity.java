@@ -125,7 +125,7 @@ public class SmartCaptureActivity extends AppCompatActivity {
         executor.execute(() -> {
             AppDatabase db = AppDatabase.getInstance(this);
 
-            CapturedContact contact = db.contactDao().getContactByPhoneBlocking(phone);
+            CapturedContact contact = db.contactDao().getByPhone(phone);
             if (contact == null) {
                 contact = new CapturedContact();
                 contact.id = java.util.UUID.randomUUID().toString();
@@ -149,10 +149,10 @@ public class SmartCaptureActivity extends AppCompatActivity {
             
             contact.notes = notesBuilder.toString() + "\n" + existingNotes;
 
-            if (db.contactDao().getContactByPhoneBlocking(phone) == null) {
-                db.contactDao().insertContact(contact);
+            if (db.contactDao().getByPhone(phone) == null) {
+                db.contactDao().insert(contact);
             } else {
-                db.contactDao().updateContact(contact);
+                db.contactDao().update(contact);
             }
 
             runOnUiThread(() -> {
