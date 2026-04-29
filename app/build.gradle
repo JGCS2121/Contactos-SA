@@ -9,13 +9,13 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(System.getenv("KEYSTORE_PATH") ?: "styleaeternum_v2.keystore")
+            storeFile file(System.getenv("KEYSTORE_PATH") ?: "styleaeternum.keystore")
             storePassword System.getenv("KEYSTORE_PASS") ?: "StyleAeternum2024"
             keyAlias System.getenv("KEY_ALIAS") ?: "styleaeternum"
             keyPassword System.getenv("KEY_PASS") ?: "StyleAeternum2024"
         }
         debug {
-            storeFile file("styleaeternum_v2.keystore")
+            storeFile file("styleaeternum.keystore")
             storePassword "StyleAeternum2024"
             keyAlias "styleaeternum"
             keyPassword "StyleAeternum2024"
