@@ -1,73 +1,26 @@
 {
   "project_info": {
-    "project_number": "528609906057",
-    "project_id": "aeternum-crm",
-    "storage_bucket": "aeternum-crm.firebasestorage.app"
+    "project_number": "1073668216785",
+    "project_id": "aeternum-crm-v2",
+    "storage_bucket": "aeternum-crm-v2.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:528609906057:android:e034362c49606f598e2558",
-        "android_client_info": {
-          "package_name": "com.styleaeternum.crm"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "528609906057-ntcoiidlbfo6ngtra6kvpvqjsbdqn0oq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBrHVmHT9yaHk6zguIYjiu-VSEL7A3UyUQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "528609906057-ntcoiidlbfo6ngtra6kvpvqjsbdqn0oq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:528609906057:android:c44e8b3a06ab13f48e2558",
+        "mobilesdk_app_id": "1:1073668216785:android:fabbdd43c15e24c99372f0",
         "android_client_info": {
           "package_name": "com.styleaeternum.crm.leads"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "528609906057-h2iub20n195l6bcscsb8sb6fp5d0oil0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.styleaeternum.crm.leads",
-            "certificate_hash": "57568273b72db77ab26b75a0f691b54a9558214a"
-          }
-        },
-        {
-          "client_id": "528609906057-ntcoiidlbfo6ngtra6kvpvqjsbdqn0oq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBrHVmHT9yaHk6zguIYjiu-VSEL7A3UyUQ"
+          "current_key": "AIzaSyD7GC7LEl8FVyuQxfJ52bKQxNYLhmH_VUE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "528609906057-ntcoiidlbfo6ngtra6kvpvqjsbdqn0oq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
