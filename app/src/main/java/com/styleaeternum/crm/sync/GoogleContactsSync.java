@@ -23,6 +23,8 @@ import java.util.Set;
  * Sincroniza contactos con Google Contacts usando Google People API v1.
  */
 public class GoogleContactsSync {
+    
+    public static String lastErrorMessage = "";
 
     private static final String TAG = "GoogleContactsSync";
     private static final String SCOPE = "https://www.googleapis.com/auth/contacts";
@@ -113,6 +115,7 @@ public class GoogleContactsSync {
             return uploadedCount + downloadedCount;
 
         } catch (Exception e) {
+            lastErrorMessage = e.getClass().getSimpleName() + ": " + e.getMessage();
             Log.e(TAG, "Error crítico en sincronización: " + e.getMessage(), e);
             return -1;
         }

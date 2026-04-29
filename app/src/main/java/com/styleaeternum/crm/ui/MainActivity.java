@@ -233,9 +233,10 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
                 } else {
                     String debugSha = getAppSignatureSHA1();
+                    String realError = GoogleContactsSync.lastErrorMessage;
                     new androidx.appcompat.app.AlertDialog.Builder(this)
-                        .setTitle("Error de Sincronización (10)")
-                        .setMessage("Copia este código SHA-1 y regístralo en Google Cloud Console:\n\n" + debugSha)
+                        .setTitle("Error de Sincronización")
+                        .setMessage("Motivo del error:\n" + realError + "\n\nSHA-1:\n" + debugSha)
                         .setPositiveButton("Cerrar", null)
                         .show();
                 }
