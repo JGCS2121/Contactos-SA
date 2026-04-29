@@ -186,11 +186,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // ─── Google Sign-In ──────────────────────────────────────────────────────
     private void signInGoogle() {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
+        Scope contactsScope = new Scope("https://www.googleapis.com/auth/contacts");
+        
+        if (account != null && GoogleSignIn.hasPermissions(account, contactsScope)) {
             syncToGoogle(account);
+        } else if (account != null) {
+            // Ya inició sesión pero falta el permiso de contactos
+            GoogleSignIn.requestPermissions(this, RC_SIGN_IN, account, contactsScope);
         } else {
             startActivityForResult(googleSignInClient.getSignInIntent(), RC_SIGN_IN);
         }
