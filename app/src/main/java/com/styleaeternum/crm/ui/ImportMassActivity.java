@@ -39,7 +39,7 @@ public class ImportMassActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
 
         // Configurar el Spinner de Estado
-        String[] statuses = new String[]{"Nuevo", "Compró", "Pidió no compró", "No Vender", "Interesada"};
+        String[] statuses = new String[]{"Sin etiqueta", "Nuevo", "Compró", "Pidió no compró", "No Vender", "Interesada"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, statuses);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spInitialStatus.setAdapter(spinnerAdapter);
@@ -104,6 +104,9 @@ public class ImportMassActivity extends AppCompatActivity {
         String group = binding.etGroup.getText() != null ? binding.etGroup.getText().toString().trim() : "";
         String notes = binding.etNotes.getText() != null ? binding.etNotes.getText().toString().trim() : "";
         String selectedStatus = binding.spInitialStatus.getSelectedItem().toString();
+        if (selectedStatus.equals("Sin etiqueta")) {
+            selectedStatus = "";
+        }
 
         if (TextUtils.isEmpty(baseName)) {
             baseName = "Cliente";

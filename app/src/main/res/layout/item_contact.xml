@@ -40,6 +40,8 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:layout_marginBottom="2dp"/>
 
             <TextView
@@ -59,7 +61,10 @@
             android:textColor="@color/white"
             android:background="@drawable/bg_badge"
             android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"/>
+            android:paddingVertical="4dp"
+            android:maxWidth="80dp"
+            android:singleLine="true"
+            android:ellipsize="end"/>
 
         <!-- Etiqueta colorida (Chip de texto) -->
         <TextView
@@ -74,6 +79,9 @@
             android:paddingHorizontal="8dp"
             android:paddingVertical="2dp"
             android:background="@drawable/bg_badge"
+            android:maxWidth="90dp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:visibility="gone" />
 
     </LinearLayout>
