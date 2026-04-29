@@ -12,7 +12,16 @@
           "package_name": "com.styleaeternum.crm.leads"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1073668216785-jvk2u3eojb333fvd00qlheqc2i1vhsp8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.styleaeternum.crm.leads",
+            "certificate_hash": "57568273b72db77ab26b75a0f691b54a9558214a"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD7GC7LEl8FVyuQxfJ52bKQxNYLhmH_VUE"
