@@ -103,10 +103,8 @@ public class ImportMassActivity extends AppCompatActivity {
         String baseName = binding.etBaseName.getText() != null ? binding.etBaseName.getText().toString().trim() : "Cliente";
         String group = binding.etGroup.getText() != null ? binding.etGroup.getText().toString().trim() : "";
         String notes = binding.etNotes.getText() != null ? binding.etNotes.getText().toString().trim() : "";
-        String selectedStatus = binding.spInitialStatus.getSelectedItem().toString();
-        if (selectedStatus.equals("Sin etiqueta")) {
-            selectedStatus = "";
-        }
+        String rawStatus = binding.spInitialStatus.getSelectedItem().toString();
+        final String selectedStatus = rawStatus.equals("Sin etiqueta") ? "" : rawStatus;
 
         if (TextUtils.isEmpty(baseName)) {
             baseName = "Cliente";
