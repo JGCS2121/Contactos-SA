@@ -49,6 +49,21 @@ public class PrefijosHelper {
     }
 
     /**
+     * Obtiene el valor actual del contador sin incrementarlo.
+     */
+    public static int getContadorActual(Context ctx) {
+        return getPrefs(ctx).getInt(KEY_CONTADOR, 0);
+    }
+
+    /**
+     * Establece un valor específico para el contador.
+     * Útil para continuar desde un número específico (ej. 480).
+     */
+    public static void setContador(Context ctx, int valor) {
+        getPrefs(ctx).edit().putInt(KEY_CONTADOR, valor).apply();
+    }
+
+    /**
      * Reinicia el contador (úsalo si cambias de prefijo y quieres empezar desde 001).
      */
     public static void reiniciarContador(Context ctx) {

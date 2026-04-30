@@ -86,6 +86,34 @@
                         android:textColor="@color/white"/>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Último número generado:"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <EditText
+                        android:id="@+id/et_contador"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="Ej: 480"
+                        android:inputType="number"
+                        android:background="@color/surface_container_low"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="10dp"
+                        android:layout_marginEnd="8dp"/>
+                </LinearLayout>
+
                 <CheckBox
                     android:id="@+id/cb_reiniciar_contador"
                     android:layout_width="wrap_content"

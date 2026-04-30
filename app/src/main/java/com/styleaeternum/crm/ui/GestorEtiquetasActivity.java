@@ -51,20 +51,33 @@ public class GestorEtiquetasActivity extends AppCompatActivity {
 
         // ── Prefijo del negocio ───────────────────────────────────────────
         android.widget.EditText etPrefijo = findViewById(R.id.et_prefijo);
+        android.widget.EditText etContador = findViewById(R.id.et_contador);
         android.widget.CheckBox cbReiniciar = findViewById(R.id.cb_reiniciar_contador);
         
-        // Mostrar el prefijo actual guardado
+        // Mostrar el prefijo y contador actuales
         etPrefijo.setText(com.styleaeternum.crm.util.PrefijosHelper.getPrefijo(this));
+        etContador.setText(String.valueOf(com.styleaeternum.crm.util.PrefijosHelper.getContadorActual(this)));
         
         findViewById(R.id.btn_guardar_prefijo).setOnClickListener(v -> {
             String nuevoPrefijo = etPrefijo.getText().toString().trim();
             com.styleaeternum.crm.util.PrefijosHelper.setPrefijo(this, nuevoPrefijo);
+            
             if (cbReiniciar.isChecked()) {
                 com.styleaeternum.crm.util.PrefijosHelper.reiniciarContador(this);
                 cbReiniciar.setChecked(false);
+                etContador.setText("0");
                 Toast.makeText(this, "Prefijo guardado y contador reiniciado a 001 ✓", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Prefijo '" + (nuevoPrefijo.isEmpty() ? "(sin prefijo)" : nuevoPrefijo) + "' guardado ✓", Toast.LENGTH_SHORT).show();
+                // Guardar el contador manual
+                String contadorStr = etContador.getText().toString().trim();
+                try {
+                    int nuevoContador = contadorStr.isEmpty() ? 0 : Integer.parseInt(contadorStr);
+                    com.styleaeternum.crm.util.PrefijosHelper.setContador(this, nuevoContador);
+                } catch (NumberFormatException e) {
+                    com.styleaeternum.crm.util.PrefijosHelper.setContador(this, 0);
+                }
+                int prox = com.styleaeternum.crm.util.PrefijosHelper.getContadorActual(this) + 1;
+                Toast.makeText(this, "Guardado. Próximo será: " + (nuevoPrefijo.isEmpty() ? "" : nuevoPrefijo + " ") + String.format("%03d", prox), Toast.LENGTH_SHORT).show();
             }
         });
         // ─────────────────────────────────────────────────────────────────
