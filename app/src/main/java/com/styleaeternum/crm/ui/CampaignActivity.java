@@ -218,6 +218,8 @@ public class CampaignActivity extends AppCompatActivity {
                 setupGroupSpinner();
                 break;
             case 3: // Manual
+                selectedContacts = new ArrayList<>();
+                updateContactsSummary();
                 btnSelectContacts.setVisibility(android.view.View.VISIBLE);
                 btnSelectContacts.setOnClickListener(v -> showManualSelector());
                 break;
