@@ -26,6 +26,7 @@ import com.styleaeternum.crm.util.SpintaxEngine;
 import com.styleaeternum.crm.adapter.CheckableContactsAdapter;
 import android.app.Dialog;
 import android.view.Window;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
