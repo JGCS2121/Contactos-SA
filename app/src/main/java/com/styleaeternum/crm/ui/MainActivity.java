@@ -37,6 +37,7 @@ import com.styleaeternum.crm.data.ContactRepository;
 import com.styleaeternum.crm.data.LabelDao;
 import com.styleaeternum.crm.sync.GoogleContactsSync;
 import com.styleaeternum.crm.ui.AgendaActivity;
+import com.styleaeternum.crm.ui.CampaignActivity;
 import com.styleaeternum.crm.util.CsvExporter;
 import com.styleaeternum.crm.util.CsvImporter;
 import com.styleaeternum.crm.viewmodel.ContactsViewModel;
@@ -102,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                 csvPickerLauncher.launch("*/*");
             } else if (id == R.id.nav_sync_google) {
                 signInGoogle();
+            } else if (id == R.id.nav_campaign) {
+                startActivity(new Intent(this, CampaignActivity.class));
             } else if (id == R.id.nav_etiquetas) {
                 startActivity(new Intent(this, GestorEtiquetasActivity.class));
             } else if (id == R.id.nav_permissions) {

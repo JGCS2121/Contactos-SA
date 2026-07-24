@@ -13,6 +13,8 @@ public class PrefijosHelper {
     private static final String PREFS_NAME = "crm_config";
     private static final String KEY_PREFIJO = "prefijo_negocio";
     private static final String KEY_CONTADOR = "contador_global";
+    private static final String KEY_WA_SOURCE = "wa_source_filter"; // "both" | "personal" | "business"
+    private static final String KEY_SYNC_INTERVAL = "sync_interval"; // "off" | "12h" | "24h"
     private static final String DEFAULT_PREFIJO = "";
 
     public static String getPrefijo(Context ctx) {
@@ -72,5 +74,36 @@ public class PrefijosHelper {
 
     private static SharedPreferences getPrefs(Context ctx) {
         return ctx.getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Devuelve qué WhatsApp se debe escuchar para capturar números.
+     * Valores: "both" (ambos), "personal" (solo personal), "business" (solo Business).
+     */
+    public static String getWaSourceFilter(Context ctx) {
+        return getPrefs(ctx).getString(KEY_WA_SOURCE, "both");
+    }
+
+    /**
+     * Guarda la preferencia de qué WhatsApp capturar.
+     * @param value "both" | "personal" | "business"
+     */
+    public static void setWaSourceFilter(Context ctx, String value) {
+        getPrefs(ctx).edit().putString(KEY_WA_SOURCE, value).apply();
+    }
+    /**
+     * Devuelve el intervalo de sincronización automática configurado.
+     * Valores: "off" (desactivada), "12h", "24h".
+     */
+    public static String getSyncInterval(Context ctx) {
+        return getPrefs(ctx).getString(KEY_SYNC_INTERVAL, "off");
+    }
+
+    /**
+     * Guarda el intervalo de sincronización automática.
+     * @param value "off" | "12h" | "24h"
+     */
+    public static void setSyncInterval(Context ctx, String value) {
+        getPrefs(ctx).edit().putString(KEY_SYNC_INTERVAL, value).apply();
     }
 }

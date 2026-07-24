@@ -32,6 +32,11 @@
         android:title="Gestionar Etiquetas" />
 
     <item
+        android:id="@+id/nav_campaign"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="📢 Campaña Masiva" />
+
+    <item
         android:id="@+id/nav_permissions"
         android:icon="@android:drawable/ic_menu_manage"
         android:title="Configurar Permisos" />

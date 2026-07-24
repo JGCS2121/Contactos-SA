@@ -81,9 +81,17 @@ public class GoogleContactsSync {
                             nc.groupMembership = "Google Sync";
                             nc.capturedAt = System.currentTimeMillis();
                             nc.notes = "Descargado de Google Contacts";
+                            nc.googleResourceName = p.getResourceName() != null ? p.getResourceName() : "";
                             
                             repository.insertSync(nc);
                             downloadedCount++;
+                        } else {
+                            // Actualizar googleResourceName si el contacto local no lo tiene aún
+                            CapturedContact existing = localMap.get(norm);
+                            if (existing != null && (existing.googleResourceName == null || existing.googleResourceName.isEmpty())) {
+                                existing.googleResourceName = p.getResourceName() != null ? p.getResourceName() : "";
+                                repository.update(existing);
+                            }
                         }
                     }
                 }
@@ -105,8 +113,13 @@ public class GoogleContactsSync {
                             .setMemberships(Collections.singletonList(new Membership()
                                     .setContactGroupMembership(new ContactGroupMembership().setContactGroupResourceName(groupResName))));
 
-                    people.people().createContact(newPerson).execute();
+                    Person created = people.people().createContact(newPerson).execute();
                     uploadedCount++;
+                    // Guardar el resourceName de Google en el contacto local
+                    if (created.getResourceName() != null && !created.getResourceName().isEmpty()) {
+                        lc.googleResourceName = created.getResourceName();
+                        repository.update(lc);
+                    }
                     Log.d(TAG, "Subido a Google: " + lc.name);
                 }
             }
@@ -147,5 +160,33 @@ public class GoogleContactsSync {
     private static String normalize(String phone) {
         if (phone == null) return "";
         return phone.replaceAll("[^0-9+]", "");
+    }
+
+    /**
+     * Elimina un contacto de Google Contacts por su resourceName.
+     * @return true si se borró correctamente, false si hubo error.
+     */
+    public static boolean deleteFromGoogle(Context context, GoogleSignInAccount account, String resourceName) {
+        if (resourceName == null || resourceName.isEmpty()) return false;
+        try {
+            GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
+                    context, Collections.singletonList(SCOPE));
+            credential.setSelectedAccount(account.getAccount());
+
+            PeopleService people = new PeopleService.Builder(
+                    new NetHttpTransport(),
+                    GsonFactory.getDefaultInstance(),
+                    credential)
+                    .setApplicationName("Style Aeternum CRM")
+                    .build();
+
+            people.people().deleteContact(resourceName).execute();
+            Log.i(TAG, "Contacto eliminado de Google: " + resourceName);
+            return true;
+        } catch (Exception e) {
+            lastErrorMessage = e.getClass().getSimpleName() + ": " + e.getMessage();
+            Log.e(TAG, "Error al eliminar de Google: " + e.getMessage(), e);
+            return false;
+        }
     }
 }

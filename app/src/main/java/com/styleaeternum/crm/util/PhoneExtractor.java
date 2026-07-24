@@ -19,10 +19,8 @@ public class PhoneExtractor {
         if (m.find()) {
             // Limpiar espacios/guiones para guardar sólo dígitos + posible +
             String raw = m.group().replaceAll("[\\s\\-.]", "");
-            if (!raw.startsWith("+") && raw.length() >= 9) {
-                // Asegurar que números sin prefijo no sean falsos positivos
-                if (raw.length() < 7) return null;
-            }
+            // Solo aceptar números internacionales con prefijo '+'
+            if (!raw.startsWith("+")) return null;
             return raw;
         }
         return null;

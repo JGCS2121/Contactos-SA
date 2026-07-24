@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name=".CrmApplication"
@@ -79,6 +82,17 @@
             android:exported="false"
             android:label="Gestionar Etiquetas" />
 
+        <activity
+            android:name=".ui.CampaignActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:label="Campaña Masiva" />
+
+        <activity
+            android:name=".ui.CampaignProgressActivity"
+            android:exported="false"
+            android:label="Progreso de Campaña" />
+
         <!-- ===== NOTIFICATION LISTENER SERVICE ===== -->
         <service
             android:name=".service.WhatsAppNotificationService"
@@ -88,6 +102,26 @@
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
+        </service>
+
+        <!-- ===== CAMPAIGN FOREGROUND SERVICE ===== -->
+        <service
+            android:name=".service.CampaignService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- ===== ACCESSIBILITY SERVICE ===== -->
+        <service
+            android:name=".service.MessageSenderAccessibilityService"
+            android:exported="true"
+            android:label="Style Aeternum — Envío automático"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
         </service>
 
         <!-- FileProvider para compartir CSV exportado -->

@@ -3,6 +3,7 @@ package com.styleaeternum.crm;
 import android.app.Application;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
+import com.styleaeternum.crm.service.SyncWorker;
 
 /**
  * Clase Application principal. Inicializa WorkManager manualmente
@@ -20,5 +21,8 @@ public class CrmApplication extends Application {
                 .build();
 
         WorkManager.initialize(this, config);
+
+        // Reprogramar sincronización automática si estaba activa
+        SyncWorker.schedule(this);
     }
 }

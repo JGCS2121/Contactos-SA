@@ -23,4 +23,5 @@ public class CapturedContact {
     public long capturedAt = 0L;     // timestamp milisegundos
     public String etiqueta = "";     // Etiqueta asignada
     public String origen = "WhatsApp"; // WhatsApp | CSV | Carga masiva
+    public String googleResourceName = ""; // ej: "people/c1234567890" (tras sincronizar con Google)
 }

@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.styleaeternum.crm.sync.GoogleContactsSync;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -234,9 +238,45 @@ public class ContactDetailActivity extends AppCompatActivity {
 
     private void deleteContact() {
         if (currentContact == null) return;
-        viewModel.delete(currentContact);
-        Toast.makeText(this, "Contacto eliminado", Toast.LENGTH_SHORT).show();
-        finish();
+
+        // Comprobar si el contacto tiene ID de Google y hay sesión activa
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        boolean hasGoogleLink = currentContact.googleResourceName != null
+                && !currentContact.googleResourceName.isEmpty();
+
+        if (hasGoogleLink && account != null) {
+            // Ofrecer borrar también de Google
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Eliminar contacto")
+                .setMessage("Este contacto está sincronizado con Google Contacts.\n¿Quieres borrarlo también de Google?")
+                .setPositiveButton("Borrar de Google también", (d, w) -> {
+                    final String resourceName = currentContact.googleResourceName;
+                    final GoogleSignInAccount finalAccount = account;
+                    executor.execute(() -> {
+                        boolean ok = GoogleContactsSync.deleteFromGoogle(this, finalAccount, resourceName);
+                        runOnUiThread(() -> {
+                            if (!ok) Toast.makeText(this,
+                                "No se pudo borrar de Google: " + GoogleContactsSync.lastErrorMessage,
+                                Toast.LENGTH_LONG).show();
+                        });
+                    });
+                    viewModel.delete(currentContact);
+                    Toast.makeText(this, "Contacto eliminado", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .setNegativeButton("Solo en la app", (d, w) -> {
+                    viewModel.delete(currentContact);
+                    Toast.makeText(this, "Contacto eliminado", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .setNeutralButton("Cancelar", null)
+                .show();
+        } else {
+            // Sin enlace Google: borrar directamente
+            viewModel.delete(currentContact);
+            Toast.makeText(this, "Contacto eliminado", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     @Override

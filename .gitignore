@@ -1,0 +1,18 @@
+# Android
+*.iml
+local.properties
+.idea/
+.DS_Store
+build/
+captures/
+app/build/
+*.jks
+*.keystore
+google-services.json
+
+# Local Gradle cache (NO subir)
+.gradle/
+
+# Gradle wrapper (mantener jar y properties)
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties

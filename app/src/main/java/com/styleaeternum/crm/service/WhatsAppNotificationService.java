@@ -42,6 +42,11 @@ public class WhatsAppNotificationService extends NotificationListenerService {
         String pkg = sbn.getPackageName();
         if (!WA_PKG.equals(pkg) && !WA_BUSSINES_PKG.equals(pkg)) return;
 
+        // Aplicar filtro de fuente configurado por el usuario
+        String filter = PrefijosHelper.getWaSourceFilter(this);
+        if ("personal".equals(filter) && WA_BUSSINES_PKG.equals(pkg)) return; // ignorar Business
+        if ("business".equals(filter) && WA_PKG.equals(pkg)) return;           // ignorar Personal
+
         Notification notification = sbn.getNotification();
         if (notification == null) return;
 

@@ -7,4 +7,5 @@
     <string name="export_csv">Exportar CSV</string>
     <string name="sync_google">Sincronizar Google</string>
     <string name="open_whatsapp">Abrir en WhatsApp</string>
+    <string name="accessibility_service_description">Permite a Style Aeternum CRM enviar mensajes de WhatsApp automáticamente durante las campañas masivas programadas.</string>
 </resources>
