@@ -193,10 +193,16 @@ public class CampaignService extends Service {
     /** Abre WhatsApp con el número y el mensaje pre-cargado en el campo de texto */
     private void openWhatsApp(String phone, String message) {
         try {
-            String cleanPhone = phone.replaceAll("[^0-9+]", "");
-            // Eliminar el '+' inicial para wa.me
-            String waPhone = cleanPhone.startsWith("+") ? cleanPhone.substring(1) : cleanPhone;
-            Uri uri = Uri.parse("https://wa.me/" + waPhone + "?text=" + Uri.encode(message));
+            String cleanPhone = phone.replaceAll("[^0-9]", "");
+            
+            // Corrección para números de Colombia (57) guardados sin código de país (10 dígitos)
+            String waPhone = cleanPhone;
+            if (cleanPhone.length() == 10 && cleanPhone.startsWith("3")) {
+                waPhone = "57" + cleanPhone;
+            }
+
+            // Usamos el esquema directo de WhatsApp para evitar pasar por el navegador web
+            Uri uri = Uri.parse("whatsapp://send?phone=" + waPhone + "&text=" + Uri.encode(message));
 
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.setPackage(waPkg != null ? waPkg : "com.whatsapp.w4b");

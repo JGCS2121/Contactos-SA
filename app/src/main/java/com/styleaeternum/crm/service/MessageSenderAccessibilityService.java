@@ -83,32 +83,12 @@ public class MessageSenderAccessibilityService extends AccessibilityService {
         AccessibilityNodeInfo root = getRootInActiveWindow();
         if (root == null) return false;
 
-        // 1. Buscar el campo de texto de WhatsApp (EditText del chat)
-        AccessibilityNodeInfo inputField = findInputField(root);
-        if (inputField == null) {
-            root.recycle();
-            return false;
-        }
-
-        // 2. Escribir el mensaje en el campo de texto
-        Bundle args = new Bundle();
-        args.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, message);
-        boolean wrote = inputField.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args);
-
-        if (!wrote) {
-            // Fallback: usar el portapapeles en versiones antiguas de Android
-            Log.w(TAG, "ACTION_SET_TEXT falló, intentando portapapeles...");
-            root.recycle();
-            return false;
-        }
-
-        // 3. Pequeña pausa para que WhatsApp procese el texto
-        try { Thread.sleep(400); } catch (InterruptedException ignored) {}
-
-        // 4. Buscar y pulsar el botón Enviar
+        // 1. Buscamos directamente el botón Enviar.
+        // Como mandamos el texto vía el Intent whatsapp://send?text=...
+        // WhatsApp se encarga de rellenar el campo y cambiar el icono del micrófono al de Enviar.
         AccessibilityNodeInfo sendBtn = findSendButton(root);
         if (sendBtn == null) {
-            Log.w(TAG, "Botón Enviar no encontrado");
+            // El botón de enviar no está visible aún (puede que esté cargando o el número sea inválido)
             root.recycle();
             return false;
         }
