@@ -12,6 +12,8 @@ import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.styleaeternum.crm.R;
@@ -21,6 +23,9 @@ import com.styleaeternum.crm.data.ContactLabel;
 import com.styleaeternum.crm.service.CampaignService;
 import com.styleaeternum.crm.service.MessageSenderAccessibilityService;
 import com.styleaeternum.crm.util.SpintaxEngine;
+import com.styleaeternum.crm.adapter.CheckableContactsAdapter;
+import android.app.Dialog;
+import android.view.Window;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,7 +46,7 @@ public class CampaignActivity extends AppCompatActivity {
     private EditText etMessage, etContactLimit;
     private TextView tvPreview, tvCombinations, tvContactsSummary, tvIntervalValue,
                      tvDurationEstimate, tvScheduledTime;
-    private Button btnPreview, btnPickTime, btnSelectContacts, btnImportNumbers, btnStart;
+    private Button btnPreview, btnPickTime, btnSelectContacts, btnImportNumbers, btnStart, btnEditList;
     private RadioGroup rgStartMode, rgWaApp;
     private RadioButton rbStartNow, rbStartScheduled;
     private SeekBar sbInterval;
@@ -103,6 +108,7 @@ public class CampaignActivity extends AppCompatActivity {
         btnSelectContacts = findViewById(R.id.btn_select_contacts);
         btnImportNumbers = findViewById(R.id.btn_import_numbers);
         btnStart         = findViewById(R.id.btn_start_campaign);
+        btnEditList      = findViewById(R.id.btn_edit_list);
         rgStartMode      = findViewById(R.id.rg_start_mode);
         rgWaApp          = findViewById(R.id.rg_wa_app);
         rbStartNow       = findViewById(R.id.rb_start_now);
@@ -392,7 +398,59 @@ public class CampaignActivity extends AppCompatActivity {
         } else {
             tvContactsSummary.setText(total + " contacto" + (total == 1 ? "" : "s") + " seleccionado" + (total == 1 ? "" : "s"));
         }
+        
+        if (total > 0) {
+            btnEditList.setVisibility(android.view.View.VISIBLE);
+            btnEditList.setOnClickListener(v -> showEditContactsDialog());
+        } else {
+            btnEditList.setVisibility(android.view.View.GONE);
+        }
+        
         updateDurationEstimate();
+    }
+
+    private void showEditContactsDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_select_contacts);
+        
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        }
+        
+        TextView tvSelectedCount = dialog.findViewById(R.id.tv_selected_count);
+        Button btnToggleAll = dialog.findViewById(R.id.btn_toggle_all);
+        Button btnCancel = dialog.findViewById(R.id.btn_cancel);
+        Button btnSave = dialog.findViewById(R.id.btn_save);
+        RecyclerView rv = dialog.findViewById(R.id.rv_checkable_contacts);
+        
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        
+        CheckableContactsAdapter adapter = new CheckableContactsAdapter(selectedContacts, (selectedCount, totalCount) -> {
+            tvSelectedCount.setText(selectedCount + " / " + totalCount);
+            btnToggleAll.setText(selectedCount == 0 ? "Seleccionar todos" : "Desmarcar todos");
+        });
+        
+        rv.setAdapter(adapter);
+        tvSelectedCount.setText(adapter.getSelectedCount() + " / " + selectedContacts.size());
+        
+        btnToggleAll.setOnClickListener(v -> {
+            boolean selectAll = adapter.getSelectedCount() == 0;
+            adapter.selectAll(selectAll);
+        });
+        
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        
+        btnSave.setOnClickListener(v -> {
+            List<CapturedContact> newSelected = adapter.getSelectedContacts();
+            selectedContacts = newSelected;
+            updateContactsSummary();
+            dialog.dismiss();
+            Toast.makeText(this, "Lista actualizada", Toast.LENGTH_SHORT).show();
+        });
+        
+        dialog.show();
     }
 
     // ── WhatsApp a usar ──────────────────────────────────────────────────────
