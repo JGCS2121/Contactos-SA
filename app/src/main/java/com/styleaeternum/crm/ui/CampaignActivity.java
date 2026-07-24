@@ -221,7 +221,8 @@ public class CampaignActivity extends AppCompatActivity {
                 selectedContacts = new ArrayList<>();
                 updateContactsSummary();
                 btnSelectContacts.setVisibility(android.view.View.VISIBLE);
-                btnSelectContacts.setOnClickListener(v -> showManualSelector());
+                btnSelectContacts.setText("Pegar números");
+                btnSelectContacts.setOnClickListener(v -> showManualInputDialog());
                 break;
             case 4: // Archivo
                 btnImportNumbers.setVisibility(android.view.View.VISIBLE);
@@ -283,25 +284,35 @@ public class CampaignActivity extends AppCompatActivity {
         });
     }
 
-    private void showManualSelector() {
-        String[] names = new String[allContacts.size()];
-        boolean[] checked = new boolean[allContacts.size()];
-        for (int i = 0; i < allContacts.size(); i++) {
-            CapturedContact c = allContacts.get(i);
-            names[i] = c.name + " · " + c.phone;
-            checked[i] = selectedContacts.contains(c);
-        }
+    private void showManualInputDialog() {
+        EditText input = new EditText(this);
+        input.setHint("Pega los números aquí (ej: +57300...)\\nPuedes separarlos por saltos de línea o comas");
+        input.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        input.setMinLines(5);
+        input.setGravity(android.view.Gravity.TOP);
+        
+        int padding = (int) (16 * getResources().getDisplayMetrics().density);
+        input.setPadding(padding, padding, padding, padding);
+
         new AlertDialog.Builder(this)
-            .setTitle("Seleccionar contactos")
-            .setMultiChoiceItems(names, checked, (dialog, which, isChecked) -> {
-                if (isChecked) {
-                    if (!selectedContacts.contains(allContacts.get(which)))
-                        selectedContacts.add(allContacts.get(which));
-                } else {
-                    selectedContacts.remove(allContacts.get(which));
+            .setTitle("Pegar números manualmente")
+            .setView(input)
+            .setPositiveButton("Agregar a la campaña", (dialog, which) -> {
+                String text = input.getText().toString();
+                String[] lines = text.split("[,\\n\\r]+");
+                selectedContacts = new ArrayList<>();
+                for (String line : lines) {
+                    String phone = line.trim().replaceAll("[^+0-9]", "");
+                    if (!phone.isEmpty()) {
+                        CapturedContact c = new CapturedContact();
+                        c.phone = phone;
+                        c.name = phone; // Nombre genérico
+                        selectedContacts.add(c);
+                    }
                 }
+                updateContactsSummary();
+                Toast.makeText(this, selectedContacts.size() + " números agregados", Toast.LENGTH_SHORT).show();
             })
-            .setPositiveButton("Confirmar", (d, w) -> updateContactsSummary())
             .setNegativeButton("Cancelar", null)
             .show();
     }
