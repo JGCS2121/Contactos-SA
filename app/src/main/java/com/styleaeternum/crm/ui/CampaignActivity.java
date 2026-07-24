@@ -38,7 +38,7 @@ public class CampaignActivity extends AppCompatActivity {
     private static final int RC_IMPORT_FILE = 801;
 
     // ── Views ────────────────────────────────────────────────────────────────
-    private EditText etMessage;
+    private EditText etMessage, etContactLimit;
     private TextView tvPreview, tvCombinations, tvContactsSummary, tvIntervalValue,
                      tvDurationEstimate, tvScheduledTime;
     private Button btnPreview, btnPickTime, btnSelectContacts, btnImportNumbers, btnStart;
@@ -81,6 +81,17 @@ public class CampaignActivity extends AppCompatActivity {
 
     private void bindViews() {
         etMessage        = findViewById(R.id.et_message);
+        etContactLimit   = findViewById(R.id.et_contact_limit);
+        if (etContactLimit != null) {
+            etContactLimit.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    updateContactsSummary();
+                }
+            });
+        }
         tvPreview        = findViewById(R.id.tv_preview);
         tvCombinations   = findViewById(R.id.tv_combinations);
         tvContactsSummary = findViewById(R.id.tv_contacts_summary);
@@ -148,8 +159,22 @@ public class CampaignActivity extends AppCompatActivity {
         tvIntervalValue.setText("2 min");
     }
 
-    private void updateDurationEstimate() {
+    private int getContactsCountToProcess() {
+        int limit = -1;
+        if (etContactLimit != null && !etContactLimit.getText().toString().trim().isEmpty()) {
+            try {
+                limit = Integer.parseInt(etContactLimit.getText().toString().trim());
+            } catch (NumberFormatException e) {}
+        }
         int total = selectedContacts.size();
+        if (limit > 0 && limit < total) {
+            return limit;
+        }
+        return total;
+    }
+
+    private void updateDurationEstimate() {
+        int total = getContactsCountToProcess();
         if (total == 0) {
             tvDurationEstimate.setText("Selecciona contactos para ver la duración estimada");
             return;
@@ -360,8 +385,13 @@ public class CampaignActivity extends AppCompatActivity {
     }
 
     private void updateContactsSummary() {
-        int n = selectedContacts.size();
-        tvContactsSummary.setText(n + " contacto" + (n == 1 ? "" : "s") + " seleccionado" + (n == 1 ? "" : "s"));
+        int total = selectedContacts.size();
+        int toProcess = getContactsCountToProcess();
+        if (toProcess < total) {
+            tvContactsSummary.setText(toProcess + " contactos a enviar (de " + total + " seleccionados)");
+        } else {
+            tvContactsSummary.setText(total + " contacto" + (total == 1 ? "" : "s") + " seleccionado" + (total == 1 ? "" : "s"));
+        }
         updateDurationEstimate();
     }
 
@@ -417,7 +447,7 @@ public class CampaignActivity extends AppCompatActivity {
         }
 
         // Advertencia anti-ban
-        int total = selectedContacts.size();
+        int total = getContactsCountToProcess();
         long totalMin = (long) intervalMinutes * total;
         new AlertDialog.Builder(this)
             .setTitle("🚀 Confirmar campaña")
@@ -433,9 +463,13 @@ public class CampaignActivity extends AppCompatActivity {
     private void startCampaign(String message) {
         ArrayList<String> phones = new ArrayList<>();
         ArrayList<String> names  = new ArrayList<>();
+        int limit = getContactsCountToProcess();
+        int count = 0;
         for (CapturedContact c : selectedContacts) {
+            if (count >= limit) break;
             phones.add(c.phone);
             names.add(c.name);
+            count++;
         }
 
         Intent intent = new Intent(this, CampaignService.class);
