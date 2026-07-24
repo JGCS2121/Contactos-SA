@@ -200,7 +200,7 @@ public class CampaignService extends Service {
 
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.setPackage(waPkg != null ? waPkg : "com.whatsapp.w4b");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         } catch (Exception e) {
             Log.e(TAG, "Error al abrir WhatsApp: " + e.getMessage());

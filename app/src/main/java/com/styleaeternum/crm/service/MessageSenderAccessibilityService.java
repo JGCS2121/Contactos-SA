@@ -118,6 +118,10 @@ public class MessageSenderAccessibilityService extends AccessibilityService {
 
         if (sent) {
             Log.i(TAG, "Mensaje enviado correctamente vía accesibilidad");
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+            performGlobalAction(GLOBAL_ACTION_BACK);
+            try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+            performGlobalAction(GLOBAL_ACTION_BACK); // Dos veces para asegurar salir del chat a veces
         } else {
             Log.w(TAG, "No se pudo pulsar el botón Enviar");
         }
